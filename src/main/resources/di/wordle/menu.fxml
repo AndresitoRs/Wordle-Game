@@ -15,19 +15,19 @@
                     </font>
                 </Label>
 
-                <Button prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #00cc66; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" text="Jugar">
+                <Button onAction="#cargarPantalla1" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #00cc66; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" text="Jugar">
                     <font>
                         <Font name="Segoe UI" size="14.0" />
                     </font>
                 </Button>
 
-                <Button prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #cc3333; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" text="Cerrar APP">
+                <Button onAction="#salir" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #cc3333; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" text="Cerrar APP">
                     <font>
                         <Font name="Segoe UI" size="14.0" />
                     </font>
                 </Button>
 
-                <Button prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: #3366cc; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" text="Estructura GitHub">
+                <Button onAction="#cargarPantalla2" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: #3366cc; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" text="Estructura GitHub">
                     <graphic>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                             <image>
