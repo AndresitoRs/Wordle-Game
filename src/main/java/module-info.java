@@ -4,7 +4,7 @@ module di.wordle {
     requires java.desktop;
     requires javafx.graphics;
     requires javafx.base;
-    requires di.wordle;
+
 
 
     opens di.wordle to javafx.fxml;

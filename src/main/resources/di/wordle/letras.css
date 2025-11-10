@@ -24,3 +24,102 @@
     -fx-border-color: #999999!important;
     -fx-border-width: 1!important;
 }
+
+.btnplay {
+    -fx-background-color: #FFA500; /* Color de fondo */
+    -fx-text-fill: white; /* Color del texto */
+    -fx-padding: 10px 20px; /* Espaciado interno */
+    -fx-font-size: 14px; /* Tamaño del texto */
+    -fx-border-radius: 5px; /* Bordes redondeados */
+    -fx-background-radius: 5px; /* Bordes de fondo redondeados */
+    -fx-cursor: hand; /* Cambia el cursor al pasar por encima */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0); /* Sombra */
+}
+
+.btnplay:hover {
+    -fx-background-color: #FF8C00; /* Color de fondo al pasar el ratón */
+}
+
+.btnplay:pressed {
+    -fx-background-color: #FF7F50; /* Color de fondo al hacer clic */
+}
+
+.btnexit {
+    -fx-background-color: #00BFFF; /* Color de fondo azul celeste */
+    -fx-text-fill: white; /* Color del texto */
+    -fx-padding: 10px 20px; /* Espaciado interno */
+    -fx-font-size: 14px; /* Tamaño del texto */
+    -fx-border-radius: 5px; /* Bordes redondeados */
+    -fx-background-radius: 5px; /* Bordes de fondo redondeados */
+    -fx-cursor: hand; /* Cambia el cursor al pasar por encima */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0); /* Sombra */
+}
+
+.btnexit:hover {
+    -fx-background-color: #1E90FF; /* Color de fondo al pasar el ratón */
+}
+
+.btnexit:pressed {
+    -fx-background-color: #1C86EE; /* Color de fondo al hacer clic */
+}
+
+
+.label-tablero {
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-text-fill: #1e0b0b;
+    -fx-alignment: center;
+    -fx-font-size: 36px;
+    -fx-pref-width: 65px;
+    -fx-pref-height: 60px;
+}
+
+/* Para los botones del teclado */
+.button-teclado {
+    -fx-background-color: gray;
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-max-width: 46px;
+    -fx-max-height: 58px;
+    -fx-alignment: center;
+}
+
+.button-teclado-black {
+    -fx-background-color: black;
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-max-width: 46px;
+    -fx-max-height: 44px;
+    -fx-alignment: center;
+}
+
+.titulo {
+    -fx-font-family: "Segoe UI Black";
+    -fx-font-size: 38px;
+    -fx-text-fill: linear-gradient(to bottom, #333, #000);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.4, 2, 2);
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 10 0 10 0;
+    -fx-letter-spacing: 1.2px;
+}
+
+.tablero .label {
+    -fx-alignment: center;
+    -fx-font-size: 1.8em;
+    -fx-background-color: white;
+    -fx-border-color: #aaa;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-pref-width: 65px;
+    -fx-pref-height: 65px;
+}
