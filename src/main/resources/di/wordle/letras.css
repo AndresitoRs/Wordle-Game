@@ -1,0 +1,26 @@
+.activa {
+    -fx-border-color: #444444!important;
+    -fx-border-width: 2!important;
+    -fx-background-color: #f2f2f2!important;
+}
+
+.normal{
+    -fx-background-color: gray!important;
+    -fx-text-fill: #222222!important;
+    -fx-border-color: #999999!important;
+    -fx-border-width: 1!important;
+}
+
+.existe{
+    -fx-background-color: #d49e48!important;
+    -fx-text-fill: #222222!important;
+    -fx-border-color: #999999!important;
+    -fx-border-width: 1!important;
+}
+
+.correcta{
+    -fx-background-color: #357401!important;
+    -fx-text-fill: #ffffff!important;
+    -fx-border-color: #999999!important;
+    -fx-border-width: 1!important;
+}

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import di.wordle.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="fondo" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="di.wordle.WordleController">
+
+    <children>
+
+        <!-- ENCABEZADO -->
+
+        <VBox alignment="CENTER" spacing="8" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER">
+                <Label styleClass="titulo" text="La Palabra del Día" />
+            </HBox>
+            <Separator prefWidth="400" />
+        </VBox>
+
+        <!-- TABLERO -->
+
+        <VBox alignment="CENTER" maxWidth="450" spacing="18" styleClass="tablero" AnchorPane.bottomAnchor="180.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="160.0">
+
+            <padding>
+                <Insets left="60" right="40" />
+            </padding>
+
+            <GridPane fx:id="tablero" alignment="CENTER" hgap="8" vgap="8">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="55" prefWidth="65" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="55" prefWidth="65" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="55" prefWidth="65" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="55" prefWidth="65" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="55" prefWidth="65" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="55" prefHeight="65" vgrow="ALWAYS" />
+                    <RowConstraints minHeight="55" prefHeight="65" vgrow="ALWAYS" />
+                    <RowConstraints minHeight="55" prefHeight="65" vgrow="ALWAYS" />
+                    <RowConstraints minHeight="55" prefHeight="65" vgrow="ALWAYS" />
+                    <RowConstraints minHeight="55" prefHeight="65" vgrow="ALWAYS" />
+                </rowConstraints>
+
+                <!-- CASILLAS -->
+                <children>
+                    <Label fx:id="i1l1" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label fx:id="i1l2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label fx:id="i1l3" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <Label fx:id="i1l4" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                    <Label fx:id="i1l5" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+
+                    <Label fx:id="i2l1" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <Label fx:id="i2l2" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label fx:id="i2l3" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <Label fx:id="i2l4" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                    <Label fx:id="i2l5" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+
+                    <Label fx:id="i3l1" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <Label fx:id="i3l2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label fx:id="i3l3" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                    <Label fx:id="i3l4" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                    <Label fx:id="i3l5" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+
+                    <Label fx:id="i4l1" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                    <Label fx:id="i4l2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Label fx:id="i4l3" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                    <Label fx:id="i4l4" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                    <Label fx:id="i4l5" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+
+                    <Label fx:id="i5l1" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                    <Label fx:id="i5l2" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                    <Label fx:id="i5l3" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                    <Label fx:id="i5l4" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                    <Label fx:id="i5l5" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                </children>
+            </GridPane>
+
+            <Resultado fx:id="info" maxWidth="300" />
+        </VBox>
+
+        <!-- BOTONES DE MENÚ (centrados debajo del tablero) -->
+
+        <HBox alignment="CENTER" spacing="20" AnchorPane.bottomAnchor="270.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <Button fx:id="bplay" styleClass="btnmenu">
+                <graphic>
+                    <ImageView fitHeight="28" fitWidth="28" preserveRatio="true">
+                        <image><Image url="@img/repeat.png" /></image>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+            <Button fx:id="bexit" onAction="#volverMenu" styleClass="btnmenu-exit">
+                <graphic>
+                    <ImageView fitHeight="28" fitWidth="28" preserveRatio="true">
+                        <image><Image url="@img/exit.png" /></image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+
+        <!-- TECLADO -->
+        <VBox alignment="CENTER" maxWidth="420" spacing="8" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+            <HBox alignment="CENTER" spacing="5">
+                <Button text="Q" />
+                <Button text="W" />
+                <Button text="E" />
+                <Button text="R" />
+                <Button text="T" />
+                <Button text="Y" />
+                <Button text="U" />
+                <Button text="I" />
+                <Button text="O" />
+                <Button text="P" />
+            </HBox>
+
+            <HBox alignment="CENTER" spacing="5">
+                <Button text="A" />
+                <Button text="S" />
+                <Button text="D" />
+                <Button text="F" />
+                <Button text="G" />
+                <Button text="H" />
+                <Button text="J" />
+                <Button text="K" />
+                <Button text="L" />
+            </HBox>
+
+            <HBox alignment="CENTER" spacing="5">
+                <Button text="Z" />
+                <Button text="X" />
+                <Button text="C" />
+                <Button text="V" />
+                <Button text="B" />
+                <Button text="N" />
+                <Button text="M" />
+                <Button fx:id="benviar" style="-fx-background-color:green; -fx-background-radius:8;" textFill="white">
+                    <graphic>
+                        <ImageView fitHeight="18" fitWidth="18" preserveRatio="true">
+                            <image><Image url="@img/tick.png" /></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="borrar" style="-fx-background-color:red; -fx-background-radius:8;">
+                    <graphic>
+                        <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
+                            <image><Image url="@img/retroceso.png" /></image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+
+    </children>
+
+    <stylesheets>
+        <URL value="@letras.css" />
+    </stylesheets>
+</AnchorPane>
