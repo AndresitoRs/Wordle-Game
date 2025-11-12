@@ -199,6 +199,59 @@ public class WordleController implements Initializable {
         casillaSeleccionada.getStyleClass().add("activa");
     }
 
+    @FXML
+    public void introducirLetra(ActionEvent event) {
+        Button botonPulsado = (Button) event.getSource();
+        if (casillaSeleccionada != null) {
+            casillaSeleccionada.setText(botonPulsado.getText());
+            String id = casillaSeleccionada.getId();
+            int fila = Integer.parseInt(id.substring(1, 2)); // Extrae la fila
+            int col = Integer.parseInt(id.substring(3)); // Extrae la columna
+            col++;
+
+            if (col > 5) {
+                casillaSeleccionada.getStyleClass().remove("activa");
+                casillaSeleccionada = null;
+                return;
+            }
+            String nuevoId = "i" + fila + "l" + col;
+
+            for (Node node : tablero.getChildren()) {
+                if (node instanceof Label && node.getId().equals(nuevoId)) {
+                    casillaSeleccionada.getStyleClass().remove("activa");
+                    casillaSeleccionada = (Label) node;
+                    casillaSeleccionada.getStyleClass().add("activa");
+                    break;
+                }
+            }
+        }
+    }
+
+    @FXML
+    public void borrar(ActionEvent event) {
+        if (casillaSeleccionada != null) {
+            casillaSeleccionada.setText("");
+            String id = casillaSeleccionada.getId();
+            int fila = Integer.parseInt(id.substring(1, 2));
+            int col = Integer.parseInt(id.substring(3));
+            col--;
+            if (col < 1) {
+                col = 1;
+            }
+            if (fila >= 1 && col >= 1) {
+                String nuevoId = "i" + fila + "l" + col;
+                for (Node node : tablero.getChildren()) {
+                    if (node instanceof Label && node.getId().equals(nuevoId)) {
+                        // Remueve la clase 'activa' de la casilla seleccionada actual
+                        casillaSeleccionada.getStyleClass().remove("activa");
+                        casillaSeleccionada = (Label) node;
+                        casillaSeleccionada.getStyleClass().add("activa");
+                        break;
+                    }
+                }
+            }
+        }
+    }
    /* public String[] comprobarPalabra(String intento, String secreta) {
         String[] colores = new String[intento.length()];
 
