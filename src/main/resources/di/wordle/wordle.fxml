@@ -7,14 +7,14 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="fondo" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="di.wordle.WordleController">
+<AnchorPane fx:id="fondo" prefWidth="530" style="-fx-background-color: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="di.wordle.WordleController">
 
     <children>
 
         <!-- ENCABEZADO -->
 
-        <VBox alignment="CENTER" spacing="8" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <HBox alignment="CENTER">
+        <VBox alignment="CENTER" spacing="8" style="-fx-background-color: rgba(30, 30, 30, 0.9);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox alignment="CENTER">
                 <Label styleClass="titulo" text="La Palabra del Día" />
             </HBox>
             <Separator prefWidth="400" />

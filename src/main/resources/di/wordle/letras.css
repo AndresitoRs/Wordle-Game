@@ -1,7 +1,12 @@
+.root {
+    -fx-background-color: #121212;
+}
+
+/* Estados de casillas */
 .activa {
-    -fx-border-color: #444444!important;
+    -fx-border-color: #2c8fdb!important;
     -fx-border-width: 2!important;
-    -fx-background-color: #f2f2f2!important;
+    -fx-background-color: #333333!important;
 }
 
 .normal{
@@ -25,145 +30,159 @@
     -fx-border-width: 1!important;
 }
 
+/* Botones play y exit */
 .btnplay {
-    -fx-background-color: #FFA500; /* Color de fondo */
-    -fx-text-fill: white; /* Color del texto */
-    -fx-padding: 10px 20px; /* Espaciado interno */
-    -fx-font-size: 14px; /* Tamaño del texto */
-    -fx-border-radius: 5px; /* Bordes redondeados */
-    -fx-background-radius: 5px; /* Bordes de fondo redondeados */
-    -fx-cursor: hand; /* Cambia el cursor al pasar por encima */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0); /* Sombra */
+    -fx-background-color: linear-gradient(to bottom, #FF8C00, #FF6F00);
+    -fx-text-fill: white;
+    -fx-padding: 12px 28px;
+    -fx-font-size: 16px;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255,140,0,0.6), 8, 0.5, 0, 2);
+    -fx-transition: background-color 0.3s ease;
 }
 
 .btnplay:hover {
-    -fx-background-color: #FF8C00; /* Color de fondo al pasar el ratón */
+    -fx-background-color: linear-gradient(to bottom, #FFA726, #FF8F00);
 }
 
 .btnplay:pressed {
-    -fx-background-color: #FF7F50; /* Color de fondo al hacer clic */
+    -fx-background-color: linear-gradient(to bottom, #EF6C00, #E65100);
 }
 
 .btnexit {
-    -fx-background-color: #00BFFF; /* Color de fondo azul celeste */
-    -fx-text-fill: white; /* Color del texto */
-    -fx-padding: 10px 20px; /* Espaciado interno */
-    -fx-font-size: 14px; /* Tamaño del texto */
-    -fx-border-radius: 5px; /* Bordes redondeados */
-    -fx-background-radius: 5px; /* Bordes de fondo redondeados */
-    -fx-cursor: hand; /* Cambia el cursor al pasar por encima */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0); /* Sombra */
+    -fx-background-color: linear-gradient(to bottom, #29B6F6, #0288D1);
+    -fx-text-fill: white;
+    -fx-padding: 12px 28px;
+    -fx-font-size: 16px;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(41,182,246,0.6), 8, 0.5, 0, 2);
+    -fx-transition: background-color 0.3s ease;
 }
 
 .btnexit:hover {
-    -fx-background-color: #1E90FF; /* Color de fondo al pasar el ratón */
+    -fx-background-color: linear-gradient(to bottom, #4FC3F7, #039BE5);
 }
 
 .btnexit:pressed {
-    -fx-background-color: #1C86EE; /* Color de fondo al hacer clic */
+    -fx-background-color: linear-gradient(to bottom, #0277BD, #01579B);
 }
 
-
+/* Etiqueta del tablero */
 .label-tablero {
-    -fx-background-color: white;
-    -fx-border-color: gray;
+    -fx-background-color: #1E1E1E;
+    -fx-border-color: #444444;
     -fx-border-radius: 15;
     -fx-background-radius: 15;
-    -fx-text-fill: #1e0b0b;
+    -fx-text-fill: #EEEEEE;
     -fx-alignment: center;
-    -fx-font-size: 36px;
+    -fx-font-size: 38px;
     -fx-pref-width: 65px;
     -fx-pref-height: 60px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 5, 0.3, 1, 1);
 }
 
-/* Para los botones del teclado */
-.button-teclado {
-    -fx-background-color: gray;
+
+/* Botones del teclado */
+.button-teclado, .button-teclado-black {
+    -fx-background-color: #2D2D2D;
     -fx-background-radius: 10;
-    -fx-text-fill: white;
-    -fx-font-size: 17px;
-    -fx-min-width: 35px;
-    -fx-min-height: 35px;
-    -fx-max-width: 46px;
+    -fx-text-fill: #DDDDDD;
+    -fx-font-size: 18px;
+    -fx-min-width: 38px;
+    -fx-min-height: 38px;
+    -fx-max-width: 48px;
     -fx-max-height: 58px;
     -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 3, 0.4, 0, 1);
+    -fx-transition: background-color 0.25s ease;
 }
 
-.button-teclado-black {
-    -fx-background-color: black;
-    -fx-background-radius: 10;
-    -fx-text-fill: white;
-    -fx-font-size: 17px;
-    -fx-min-width: 35px;
-    -fx-min-height: 35px;
-    -fx-max-width: 46px;
-    -fx-max-height: 44px;
-    -fx-alignment: center;
+.button-teclado:hover, .button-teclado-black:hover {
+    -fx-background-color: #444444;
 }
 
+/* Título */
 .titulo {
     -fx-font-family: "Segoe UI Black";
-    -fx-font-size: 38px;
-    -fx-text-fill: linear-gradient(to bottom, #333, #000);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0.4, 2, 2);
+    -fx-font-size: 42px;
+    -fx-text-fill: linear-gradient(to bottom, #FFFFFF, #BBBBBB);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 10, 0.4, 3, 3);
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-padding: 10 0 10 0;
-    -fx-letter-spacing: 1.2px;
+    -fx-padding: 12 0 12 0;
+    -fx-letter-spacing: 1.5px;
 }
 
+/* Casillas del tablero */
 .tablero .label {
     -fx-alignment: center;
-    -fx-font-size: 1.8em;
-    -fx-background-color: white;
-    -fx-border-color: #aaa;
+    -fx-font-size: 1.9em;
+    -fx-background-color: #292929;
+    -fx-border-color: #555555;
     -fx-border-width: 2;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
     -fx-pref-width: 65px;
     -fx-pref-height: 65px;
+    -fx-text-fill: #EEEEEE;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 5, 0.3, 1, 1);
 }
 
-/* Teclado */
+/* Botones generales */
 .button {
     -fx-font-size: 1em;
-    -fx-background-color: #666;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-    -fx-pref-width: 40px;
-    -fx-pref-height: 45px;
+    -fx-background-color: #3A3A3A;
+    -fx-text-fill: #EEEEEE;
+    -fx-background-radius: 10;
+    -fx-pref-width: 42px;
+    -fx-pref-height: 48px;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 4, 0.4, 0, 2);
+    -fx-transition: opacity 0.25s ease;
 }
-.button:hover { -fx-opacity: 0.85; }
+
+.button:hover {
+    -fx-opacity: 0.85;
+}
 
 /* Botones de menú (Jugar / Salir) */
 .btnmenu {
-    -fx-background-color: linear-gradient(to right, #27ae60, #2ecc71);
+    -fx-background-color: linear-gradient(to right, #43A047, #66BB6A);
     -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10 20 10 20;
-    -fx-background-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.3, 2, 2);
+    -fx-font-size: 17px;
+    -fx-padding: 12 24 12 24;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 8, 0.4, 3, 3);
     -fx-cursor: hand;
-    -fx-transition: all 0.3s;
+    -fx-transition: all 0.3s ease;
 }
+
 .btnmenu:hover {
-    -fx-background-color: linear-gradient(to right, #2ecc71, #27ae60);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
+    -fx-background-color: linear-gradient(to right, #66BB6A, #43A047);
+    -fx-scale-x: 1.07;
+    -fx-scale-y: 1.07;
 }
 
 .btnmenu-exit {
-    -fx-background-color: linear-gradient(to right, #c0392b, #e74c3c);
+    -fx-background-color: linear-gradient(to right, #E53935, #EF5350);
     -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-padding: 10 20 10 20;
-    -fx-background-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0.3, 2, 2);
+    -fx-font-size: 17px;
+    -fx-padding: 12 24 12 24;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 8, 0.4, 3, 3);
     -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
 }
+
 .btnmenu-exit:hover {
-    -fx-background-color: linear-gradient(to right, #e74c3c, #c0392b);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
+    -fx-background-color: linear-gradient(to right, #EF5350, #E53935);
+    -fx-scale-x: 1.07;
+    -fx-scale-y: 1.07;
 }
