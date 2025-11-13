@@ -129,10 +129,12 @@ public class WordleController implements Initializable {
         iniciarPartida();
         bplay.setVisible(false);
         bexit.setVisible(false);
+        info.limpiar();
         URL ruta = getClass().getResource("img/fondo.png");
         String estilo = "-fx-background-image:url('"+ruta+"')";
         fondo.setStyle(estilo);
     }
+
 
     private String obtenerPalabraAleatoria() {
         try (InputStream is = getClass().getResourceAsStream("/palabras.txt")) {
@@ -382,30 +384,22 @@ public class WordleController implements Initializable {
             desactivarCasillasFila(fila);
         }
     }
-   /* public String[] comprobarPalabra(String intento, String secreta) {
-        String[] colores = new String[intento.length()];
-
-        for (int i = 0; i < intento.length(); i++) {
-            char letra = intento.charAt(i);
-
-            if (letra == secreta.charAt(i)) {
-                colores[i] = "verde"; // letra correcta y en posición correcta
-            } else if (secreta.contains(String.valueOf(letra))) {
-                colores[i] = "amarillo"; // letra existe, pero en otra posición
-            } else {
-                colores[i] = "gris"; // letra no existe
-            }
-        }
-
-        return colores;
-    }
-    */
 
     public void salir(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+    /**
+     * Muestra una alerta con un título y mensaje.
+     */
 
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
     private void agregarLetraAlTablero(String letra) {
         if (casillaSeleccionada == null) {
             // Si no hay casilla seleccionada, selecciona la primera vacía de la filaActual

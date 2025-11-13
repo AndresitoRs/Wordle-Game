@@ -105,46 +105,46 @@
         <VBox alignment="CENTER" maxWidth="420" spacing="8" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
             <HBox alignment="CENTER" spacing="5">
-                <Button text="Q" />
-                <Button text="W" />
-                <Button text="E" />
-                <Button text="R" />
-                <Button text="T" />
-                <Button text="Y" />
-                <Button text="U" />
-                <Button text="I" />
-                <Button text="O" />
-                <Button text="P" />
+                <Button onAction="#introducirLetra" text="Q" />
+                <Button onAction="#introducirLetra" text="W" />
+                <Button onAction="#introducirLetra" text="E" />
+                <Button onAction="#introducirLetra" text="R" />
+                <Button onAction="#introducirLetra" text="T" />
+                <Button onAction="#introducirLetra" text="Y" />
+                <Button onAction="#introducirLetra" text="U" />
+                <Button onAction="#introducirLetra" text="I" />
+                <Button onAction="#introducirLetra" text="O" />
+                <Button onAction="#introducirLetra" text="P" />
             </HBox>
 
             <HBox alignment="CENTER" spacing="5">
-                <Button text="A" />
-                <Button text="S" />
-                <Button text="D" />
-                <Button text="F" />
-                <Button text="G" />
-                <Button text="H" />
-                <Button text="J" />
-                <Button text="K" />
-                <Button text="L" />
+                <Button onAction="#introducirLetra" text="A" />
+                <Button onAction="#introducirLetra" text="S" />
+                <Button onAction="#introducirLetra" text="D" />
+                <Button onAction="#introducirLetra" text="F" />
+                <Button onAction="#introducirLetra" text="G" />
+                <Button onAction="#introducirLetra" text="H" />
+                <Button onAction="#introducirLetra" text="J" />
+                <Button onAction="#introducirLetra" text="K" />
+                <Button onAction="#introducirLetra" text="L" />
             </HBox>
 
             <HBox alignment="CENTER" spacing="5">
-                <Button text="Z" />
-                <Button text="X" />
-                <Button text="C" />
-                <Button text="V" />
-                <Button text="B" />
-                <Button text="N" />
-                <Button text="M" />
-                <Button fx:id="benviar" style="-fx-background-color:green; -fx-background-radius:8;" textFill="white">
+                <Button onAction="#introducirLetra" text="Z" />
+                <Button onAction="#introducirLetra" text="X" />
+                <Button onAction="#introducirLetra" text="C" />
+                <Button onAction="#introducirLetra" text="V" />
+                <Button onAction="#introducirLetra" text="B" />
+                <Button onAction="#introducirLetra" text="N" />
+                <Button onAction="#introducirLetra" text="M" />
+                <Button fx:id="benviar" onAction="#comprobarPalabra" style="-fx-background-color:green; -fx-background-radius:8;" textFill="white">
                     <graphic>
                         <ImageView fitHeight="18" fitWidth="18" preserveRatio="true">
                             <image><Image url="@img/tick.png" /></image>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button fx:id="borrar" style="-fx-background-color:red; -fx-background-radius:8;">
+                <Button fx:id="borrar" onAction="#borrar" style="-fx-background-color:red; -fx-background-radius:8;">
                     <graphic>
                         <ImageView fitHeight="20" fitWidth="20" preserveRatio="true">
                             <image><Image url="@img/retroceso.png" /></image>
@@ -153,9 +153,7 @@
                 </Button>
             </HBox>
         </VBox>
-
     </children>
-
     <stylesheets>
         <URL value="@letras.css" />
     </stylesheets>

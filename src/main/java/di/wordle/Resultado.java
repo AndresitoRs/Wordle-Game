@@ -42,4 +42,8 @@ public class Resultado extends AnchorPane {
         controlador.getImagen().setImage(img);
 
     }
+
+    public void limpiar(){
+        controlador.getImagen().setImage(null);
+    }
 }
