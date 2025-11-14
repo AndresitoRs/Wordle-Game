@@ -1,5 +1,6 @@
 package di.wordle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -120,6 +123,27 @@ public class WordleController implements Initializable {
         stage.show();
     }
 
+    private void procesarTeclaFisica(KeyEvent event) {
+        KeyCode code = event.getCode();
+
+        if (code == KeyCode.ENTER) {
+            comprobarPalabra(null);
+            event.consume();
+        } else if (code == KeyCode.BACK_SPACE) {
+            borrar(null);
+            event.consume();
+        } else if (code.isLetterKey()) {
+            // Solo letras, sin incluir Enter ni otros símbolos
+            String letra = event.getText().toUpperCase();
+
+            // Asegurarse que letra sea una sola letra A-Z
+            if (letra.matches("[A-Z]")) {
+                agregarLetraAlTablero(letra);
+                event.consume();
+            }
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         casillaSeleccionada = i1l1;
@@ -131,9 +155,38 @@ public class WordleController implements Initializable {
         bexit.setVisible(false);
         info.limpiar();
         URL ruta = getClass().getResource("img/fondo.png");
-        String estilo = "-fx-background-image:url('"+ruta+"')";
+        String estilo = "-fx-background-image:url('" + ruta + "')";
         fondo.setStyle(estilo);
+
+        fondo.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.setOnKeyPressed(event -> {
+                    System.out.println("Tecla presionada: code=" + event.getCode() + ", texto='" + event.getText() + "'");
+                    KeyCode code = event.getCode();
+                    if (code == KeyCode.ENTER) {
+                        comprobarPalabra(null);
+                        event.consume();
+                    } else if (code == KeyCode.BACK_SPACE) {
+                        borrar(null);
+                        event.consume();
+                    } else if (code.isLetterKey()) {
+                        String letra = event.getText().toUpperCase();
+                        if (letra.isEmpty()) {
+                            letra = code.getName().toUpperCase();
+                        }
+                        if (letra.length() == 1 && letra.matches("[A-Z]")) {
+                            agregarLetraAlTablero(letra);
+                            event.consume();
+                        }
+                    }
+                });
+            }
+        });
+        Platform.runLater(() -> {
+            fondo.requestFocus();
+        });
     }
+
 
 
     private String obtenerPalabraAleatoria() {
@@ -406,6 +459,14 @@ public class WordleController implements Initializable {
         info.limpiar();
         bplay.setVisible(false);
         bexit.setVisible(false);
+
+        Scene escena = fondo.getScene();
+        if (escena != null) {
+            escena.setOnKeyPressed(event -> procesarTeclaFisica(event));
+        }
+
+        // Asegurar que fondo tiene el foco para recibir eventos de teclado
+        fondo.requestFocus();
     }
 
     public void salir(ActionEvent event) {
