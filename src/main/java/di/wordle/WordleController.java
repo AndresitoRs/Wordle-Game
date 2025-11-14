@@ -385,6 +385,29 @@ public class WordleController implements Initializable {
         }
     }
 
+    @FXML
+    private void reiniciarPartida() {
+        // Restablece todas las casillas a su estado inicial
+        for (int fila = 1; fila <= 5; fila++) {
+            for (int col = 1; col <= 5; col++) {
+                String casillaId = "i" + fila + "l" + col;
+                Label casilla = (Label) tablero.lookup("#" + casillaId);
+                casilla.setText("");
+                casilla.getStyleClass().removeAll("activa", "correcta", "existe", "normal");
+                casilla.setDisable(false); // Habilita todas las casillas
+            }
+        }
+        casillaSeleccionada = (Label) tablero.lookup("#i1l1");
+        casillaSeleccionada.getStyleClass().add("activa");
+        filaActual = 1;
+        palabraOculta = obtenerPalabraAleatoria();
+        System.out.println(palabraOculta);
+        iniciarPartida();
+        info.limpiar();
+        bplay.setVisible(false);
+        bexit.setVisible(false);
+    }
+
     public void salir(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();

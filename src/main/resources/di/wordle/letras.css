@@ -1,6 +1,7 @@
 .root {
     -fx-background-color: #121212;
 }
+/*  ESTILOS DE LA APLICACIÓN FUNCIONAL  */
 
 /* Estados de casillas */
 .activa {
@@ -88,24 +89,43 @@
 
 
 /* Botones del teclado */
-.button-teclado, .button-teclado-black {
+.button-teclado, .button-teclado-black, .button {
     -fx-background-color: #2D2D2D;
-    -fx-background-radius: 10;
-    -fx-text-fill: #DDDDDD;
-    -fx-font-size: 18px;
-    -fx-min-width: 38px;
-    -fx-min-height: 38px;
-    -fx-max-width: 48px;
-    -fx-max-height: 58px;
+    -fx-background-radius: 12;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 22px; /* Más grande */
+    -fx-font-weight: bold; /* Más contundente */
+    -fx-padding: 6 10;
+    -fx-min-width: 42px;
+    -fx-min-height: 42px;
+    -fx-max-width: 58px;
+    -fx-max-height: 68px;
     -fx-alignment: center;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 3, 0.4, 0, 1);
-    -fx-transition: background-color 0.25s ease;
+
+    /* Sombra al texto */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 4, 0.4, 0, 1);
+
+    /* Sombra al botón */
+    -fx-shadow-highlight-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 5, 0.4, 0, 1);
+
+    /* Animación suave */
+    -fx-transition: all 0.15s ease-in-out;
 }
 
-.button-teclado:hover, .button-teclado-black:hover {
+/* Hover */
+.button-teclado:hover, .button-teclado-black:hover, .button:hover {
     -fx-background-color: #444444;
+    -fx-font-size: 21px; /* pequeñísimo zoom */
 }
+
+/* Al presionar */
+.button-teclado:pressed, .button-teclado-black:pressed, .button:pressed {
+    -fx-background-color: #1E1E1E;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,1), 6, 0.5, 0, 1);
+}
+
 
 /* Título */
 .titulo {

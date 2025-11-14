@@ -1,75 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="fondo" prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: linear-gradient(to bottom, #1a1a1a, #333333); -fx-padding: 20;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="di.wordle.ControladorMenu">
+<AnchorPane fx:id="fondo" prefHeight="600.0" prefWidth="500.0"
+            style="-fx-background-color: linear-gradient(to bottom, #1a1a1a, #333333); -fx-padding: 20;"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="di.wordle.ControladorMenu">
     <children>
-        <VBox alignment="CENTER" layoutX="9.0" layoutY="12.0" prefHeight="344.0" prefWidth="486.0" spacing="30.0" AnchorPane.bottomAnchor="244.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="12.0">
+        <VBox alignment="CENTER" layoutX="9.0" layoutY="12.0" prefHeight="344.0" prefWidth="486.0" spacing="30.0"
+              AnchorPane.bottomAnchor="244.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="5.0"
+              AnchorPane.topAnchor="12.0">
             <children>
                 <Label text="MENÚ PRINCIPAL" textFill="white">
                     <font>
-                        <Font name="Segoe UI Black" size="34.0" />
+                        <Font name="Segoe UI Black" size="34.0"/>
                     </font>
                 </Label>
 
-                <Button onAction="#cargarPantalla1" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #00cc66; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" text="Jugar">
+                <Button onAction="#cargarPantalla1" prefHeight="45.0" prefWidth="200.0"
+                        style="-fx-background-color: #00cc66; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;"
+                        onMouseEntered="#zoomIn" onMouseExited="#zoomOut"
+                        onMousePressed="#brilloOn" onMouseReleased="#brilloOff"
+                        text="Jugar">
                     <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI" size="14.0"/>
                     </font>
                 </Button>
 
-                <Button onAction="#salir" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #cc3333; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" text="Cerrar APP">
+                <Button onAction="#salir" prefHeight="45.0" prefWidth="200.0"
+                        style="-fx-background-color: #cc3333; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;"
+                        onMouseEntered="#zoomIn" onMouseExited="#zoomOut"
+                        onMousePressed="#brilloOn" onMouseReleased="#brilloOff"
+                        text="Cerrar APP">
                     <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI" size="14.0"/>
                     </font>
                 </Button>
 
-                <Button onAction="#cargarPantalla2" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: #3366cc; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;" text="Estructura GitHub">
+                <Button onAction="#cargarPantalla2" prefHeight="45.0" prefWidth="240.0"
+                        style="-fx-background-color: #3366cc; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;"
+                        onMouseEntered="#zoomIn" onMouseExited="#zoomOut"
+                        onMousePressed="#brilloOn" onMouseReleased="#brilloOff"
+                        text="Estructura GitHub">
                     <graphic>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@img/logo.png" />
+                                <Image url="@img/logo.png"/>
                             </image>
                         </ImageView>
                     </graphic>
                     <font>
-                        <Font name="Segoe UI" size="14.0" />
+                        <Font name="Segoe UI" size="14.0"/>
                     </font>
                 </Button>
             </children>
         </VBox>
 
-        <HBox alignment="CENTER" prefHeight="79.0" spacing="10" style="-fx-background-color: #222222; -fx-border-color: #444444; -fx-border-width: 0 0 2 0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <HBox alignment="CENTER" prefHeight="79.0" spacing="10"
+              style="-fx-background-color: #222222; -fx-border-color: #444444; -fx-border-width: 0 0 2 0;"
+              AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
                 <GridPane alignment="CENTER" prefHeight="79.0" style="-fx-padding: 10;" HBox.hgrow="ALWAYS">
                     <columnConstraints>
-                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="50" />
-                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="0" />
-                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="50" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="50"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" percentWidth="50"/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints vgrow="ALWAYS" />
+                        <RowConstraints vgrow="ALWAYS"/>
                     </rowConstraints>
                     <children>
                         <Label alignment="CENTER_RIGHT" text="Juego Wordle" textFill="#00cc66">
                             <font>
-                                <Font name="Berlin Sans FB" size="22.0" />
+                                <Font name="Berlin Sans FB" size="22.0"/>
                             </font>
                             <graphic>
                                 <ImageView fitHeight="32.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@img/wordlelogo.png" />
+                                        <Image url="@img/wordlelogo.png"/>
                                     </image>
                                 </ImageView>
                             </graphic>
                         </Label>
-
                         <Label text="2025 - Andrés Rivada" textFill="white" GridPane.columnIndex="2">
                             <font>
-                                <Font name="Berlin Sans FB" size="22.0" />
+                                <Font name="Berlin Sans FB" size="22.0"/>
                             </font>
                         </Label>
                     </children>
