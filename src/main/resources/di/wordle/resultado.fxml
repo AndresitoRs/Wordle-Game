@@ -15,12 +15,13 @@
               AnchorPane.rightAnchor="0.0">
 
             <!-- Contenedor centrado y desplazado hacia la izquierda y arriba -->
-            <StackPane alignment="TOP_LEFT"
+            <StackPane fx:id="contenedor"
+                       alignment="TOP_LEFT"
                        maxWidth="150"
                        maxHeight="200"
                        style="-fx-translate-x: -75; -fx-translate-y: -55;">
                 <ImageView fx:id="imagen"
-                           fitWidth="110"
+                           fitWidth="150"
                            preserveRatio="true"
                            smooth="true"
                            pickOnBounds="true"

@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class Resultado extends AnchorPane {
 
@@ -35,11 +36,13 @@ public class Resultado extends AnchorPane {
     public void ganar() {
         Image img = new Image(getClass().getResourceAsStream("/di/wordle/img/tuganas.png"));
         controlador.mostrarResultado(img);
+        controlador.lanzarConfeti();
     }
 
     public void perder() {
         Image img = new Image(getClass().getResourceAsStream("/di/wordle/img/juegoterminado.png"));
         controlador.mostrarResultado(img);
+        controlador.lanzarHumoDerrota();
     }
 
 
