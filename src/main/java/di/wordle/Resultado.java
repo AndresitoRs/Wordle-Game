@@ -26,6 +26,7 @@ public class Resultado extends AnchorPane {
             loader.setController(controlador);
             Node nodo = loader.load();
             this.getChildren().add(nodo);
+            controlador.init();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,17 +34,16 @@ public class Resultado extends AnchorPane {
 
     public void ganar() {
         Image img = new Image(getClass().getResourceAsStream("/di/wordle/img/tuganas.png"));
-        controlador.getImagen().setImage(img);
-
+        controlador.mostrarResultado(img);
     }
 
     public void perder() {
         Image img = new Image(getClass().getResourceAsStream("/di/wordle/img/juegoterminado.png"));
-        controlador.getImagen().setImage(img);
-
+        controlador.mostrarResultado(img);
     }
 
-    public void limpiar(){
+
+    public void limpiar() {
         controlador.getImagen().setImage(null);
     }
 }

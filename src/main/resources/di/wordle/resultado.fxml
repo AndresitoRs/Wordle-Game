@@ -7,7 +7,6 @@
             xmlns:fx="http://javafx.com/fxml/1"
             prefHeight="260.0" prefWidth="190.0"
             style="-fx-background-color: transparent;">
-
     <children>
         <VBox alignment="CENTER" spacing="10"
               AnchorPane.topAnchor="0.0"
