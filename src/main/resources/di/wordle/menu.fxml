@@ -19,31 +19,37 @@
                     </font>
                 </Label>
 
-                <Button onAction="#cargarPantalla1" prefHeight="45.0" prefWidth="200.0"
-                        style="-fx-background-color: #00cc66; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;"
+                <Button fx:id="btnJugar"
+                        onAction="#cargarPantalla1"
                         onMouseEntered="#zoomIn" onMouseExited="#zoomOut"
                         onMousePressed="#brilloOn" onMouseReleased="#brilloOff"
-                        text="Jugar">
+                        prefHeight="45.0" prefWidth="200.0"
+                        text="Jugar"
+                        style="-fx-background-color: #00cc66; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 40;">
                     <font>
                         <Font name="Segoe UI" size="14.0"/>
                     </font>
                 </Button>
 
-                <Button onAction="#salir" prefHeight="45.0" prefWidth="200.0"
-                        style="-fx-background-color: #cc3333; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;"
+                <Button fx:id="btnSalir"
+                        onAction="#salir"
                         onMouseEntered="#zoomIn" onMouseExited="#zoomOut"
                         onMousePressed="#brilloOn" onMouseReleased="#brilloOff"
-                        text="Cerrar APP">
+                        prefHeight="45.0" prefWidth="200.0"
+                        text="Cerrar APP"
+                        style="-fx-background-color: #cc3333; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 40;">
                     <font>
                         <Font name="Segoe UI" size="14.0"/>
                     </font>
                 </Button>
 
-                <Button onAction="#cargarPantalla2" prefHeight="45.0" prefWidth="240.0"
-                        style="-fx-background-color: #3366cc; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 10;"
+                <Button fx:id="btnGit"
+                        onAction="#cargarPantalla2"
                         onMouseEntered="#zoomIn" onMouseExited="#zoomOut"
                         onMousePressed="#brilloOn" onMouseReleased="#brilloOff"
-                        text="Estructura GitHub">
+                        prefHeight="45.0" prefWidth="240.0"
+                        text="Estructura GitHub"
+                        style="-fx-background-color: #3366cc; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 40;">
                     <graphic>
                         <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                             <image>

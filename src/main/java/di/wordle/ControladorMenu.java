@@ -23,6 +23,13 @@ public class ControladorMenu {
     private HostServices hostServices;
     @FXML
     private AnchorPane fondo;
+    @FXML
+    private Button btnJugar;
+    @FXML
+    private Button btnSalir;
+    @FXML
+    private Button btnGit;
+
 
     public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;

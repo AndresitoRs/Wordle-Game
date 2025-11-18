@@ -154,6 +154,6 @@
         </VBox>
     </children>
     <stylesheets>
-        <URL value="@letras.css" />
+        <URL value="@estilos.css" />
     </stylesheets>
 </AnchorPane>
