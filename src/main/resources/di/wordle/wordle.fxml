@@ -104,38 +104,38 @@
         <VBox alignment="CENTER" maxWidth="420" spacing="8" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
             <HBox alignment="CENTER" spacing="5">
-                <Button onAction="#introducirLetra" text="Q" />
-                <Button onAction="#introducirLetra" text="W" />
-                <Button onAction="#introducirLetra" text="E" />
-                <Button onAction="#introducirLetra" text="R" />
-                <Button onAction="#introducirLetra" text="T" />
-                <Button onAction="#introducirLetra" text="Y" />
-                <Button onAction="#introducirLetra" text="U" />
-                <Button onAction="#introducirLetra" text="I" />
-                <Button onAction="#introducirLetra" text="O" />
-                <Button onAction="#introducirLetra" text="P" />
+                <Button onAction="#introducirLetra" text="Q" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="W" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="E" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="R" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="T" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="Y" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="U" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="I" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="O" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="P" styleClass="button-teclado" />
             </HBox>
 
             <HBox alignment="CENTER" spacing="5">
-                <Button onAction="#introducirLetra" text="A" />
-                <Button onAction="#introducirLetra" text="S" />
-                <Button onAction="#introducirLetra" text="D" />
-                <Button onAction="#introducirLetra" text="F" />
-                <Button onAction="#introducirLetra" text="G" />
-                <Button onAction="#introducirLetra" text="H" />
-                <Button onAction="#introducirLetra" text="J" />
-                <Button onAction="#introducirLetra" text="K" />
-                <Button onAction="#introducirLetra" text="L" />
+                <Button onAction="#introducirLetra" text="A" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="S" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="D" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="F" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="G" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="H" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="J" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="K" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="L" styleClass="button-teclado" />
             </HBox>
 
             <HBox alignment="CENTER" spacing="5">
-                <Button onAction="#introducirLetra" text="Z" />
-                <Button onAction="#introducirLetra" text="X" />
-                <Button onAction="#introducirLetra" text="C" />
-                <Button onAction="#introducirLetra" text="V" />
-                <Button onAction="#introducirLetra" text="B" />
-                <Button onAction="#introducirLetra" text="N" />
-                <Button onAction="#introducirLetra" text="M" />
+                <Button onAction="#introducirLetra" text="Z" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="X" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="C" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="V" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="B" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="N" styleClass="button-teclado" />
+                <Button onAction="#introducirLetra" text="M" styleClass="button-teclado" />
                 <Button fx:id="benviar" onAction="#comprobarPalabra" styleClass="button-teclado">
                     <graphic>
                         <ImageView fitHeight="18" fitWidth="18" preserveRatio="true">

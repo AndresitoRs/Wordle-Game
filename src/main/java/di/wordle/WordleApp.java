@@ -13,10 +13,20 @@ public class WordleApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(WordleApp.class.getResource("menu.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 500, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 550, 670);
+
+        // Cargar CSS (importante para que funcione el estilo del ComboBox)
+        scene.getStylesheets().add(
+                WordleApp.class.getResource("estilos.css").toExternalForm()
+        );
+
+        // Obtener controlador
         ControladorMenu controlador = fxmlLoader.getController();
-        WordleController controller = new WordleController(); controlador.setHostServices(getHostServices());
-        stage.setTitle("Wordle"); stage.setScene(scene); stage.show();
+        controlador.setHostServices(getHostServices());
+
+        stage.setTitle("Wordle");
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void main(String[] args) {

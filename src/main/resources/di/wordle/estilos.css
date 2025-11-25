@@ -1,7 +1,62 @@
 .root {
     -fx-background-color: #121212;
 }
+/* ComboBox estilo oscuro moderno */
+.combo-box {
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #3a3a3a;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-padding: 4 8 4 8;
+}
 
+/* Texto seleccionado */
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+/* Flecha del ComboBox */
+.combo-box .arrow-button {
+    -fx-background-color: #2a2a2a;
+    -fx-background-radius: 0 12 12 0;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #a0a0a0;
+}
+
+/* Hover */
+.combo-box:hover {
+    -fx-border-color: #00cc66;
+    -fx-effect: dropshadow(gaussian, rgba(0,255,150,0.25), 10, 0.2, 0, 0);
+}
+
+/* Cuando está abierto/enfocado */
+.combo-box:focused {
+    -fx-border-color: #00e676;
+    -fx-effect: dropshadow(gaussian, rgba(0,255,150,0.4), 12, 0.3, 0, 0);
+}
+
+/* Lista desplegable */
+.combo-box-popup .list-view {
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #3a3a3a;
+}
+
+/* Items */
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+/* Hover en items */
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #00cc66;
+    -fx-text-fill: black;
+}
 /*  ESTILOS DE LA APLICACIÓN FUNCIONAL  */
 
 /* Estados de casillas */
@@ -90,7 +145,7 @@
 
 
 /* Botones del teclado */
-.button-teclado, .button-teclado-black, .button {
+.button-teclado, .button-teclado-black {
     -fx-background-color: #2D2D2D;
     -fx-background-radius: 12;
     -fx-text-fill: #FFFFFF;
@@ -116,13 +171,13 @@
 }
 
 /* Hover */
-.button-teclado:hover, .button-teclado-black:hover, .button:hover {
+.button-teclado:hover, .button-teclado-black:hover {
     -fx-background-color: #444444;
     -fx-font-size: 21px; /* pequeñísimo zoom */
 }
 
 /* Al presionar */
-.button-teclado:pressed, .button-teclado-black:pressed, .button:pressed {
+.button-teclado:pressed, .button-teclado-black:pressed {
     -fx-background-color: #1E1E1E;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,1), 6, 0.5, 0, 1);
 }
@@ -178,9 +233,9 @@
 .btnmenu {
     -fx-background-color: linear-gradient(to right, #43A047, #66BB6A);
     -fx-text-fill: white;
-    -fx-font-size: 18px; /* un poquito más grande */
+    -fx-font-size: 16px; /* más pequeño */
     -fx-font-weight: bold;
-    -fx-padding: 16 32 16 32; /* más grande y elegante */
+    -fx-padding: 12 24 12 24; /* menos padding */
     -fx-background-radius: 18;
 
     /* sombra suave pero más visible */
@@ -205,15 +260,13 @@
     -fx-effect: dropshadow(gaussian, #66bb6a, 18, 0.6, 0, 0);
 }
 
-/* --------------------------------------------- */
-
 /* BOTÓN SALIR */
 .btnmenu-exit {
     -fx-background-color: linear-gradient(to right, #E53935, #EF5350);
     -fx-text-fill: white;
-    -fx-font-size: 18px;
+    -fx-font-size: 16px; /* más pequeño */
     -fx-font-weight: bold;
-    -fx-padding: 16 32 16 32;
+    -fx-padding: 12 24 12 24; /* menos padding */
     -fx-background-radius: 18;
 
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 10, 0.4, 0, 2);
@@ -234,14 +287,92 @@
 }
 
 .btnmenu ImageView, .btnmenu-exit ImageView {
-    -fx-fit-width: 28px;
-    -fx-fit-height: 28px;
+    -fx-fit-width: 22px;  /* más pequeño */
+    -fx-fit-height: 22px;
     -fx-opacity: 0.95;
 }
 
 /* mejor visibilidad al pasar el ratón */
 .btnmenu:hover ImageView, .btnmenu-exit:hover ImageView {
-    -fx-fit-width: 30px;
-    -fx-fit-height: 30px;
+    -fx-fit-width: 24px;
+    -fx-fit-height: 24px;
     -fx-opacity: 1;
 }
+
+.bjugar, bgit, bsalir {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 16 32 16 32;
+    -fx-background-radius: 18;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 10, 0.4, 0, 2);
+    -fx-opacity: 0.95;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-transition: all 0.3s ease;
+}
+
+/* colores específicos */
+.bjugar {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 16 16 16 16;
+    -fx-background-radius: 18;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 10, 0.4, 0, 2);
+    -fx-opacity: 0.95;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-transition: all 0.3s ease;
+    -fx-min-width: 120px;
+    -fx-max-width: 150px;
+    -fx-background-color: linear-gradient(to right, #43A047, #66BB6A);
+}
+
+.bsalir {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 16 16 16 16;
+    -fx-background-radius: 18;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 10, 0.4, 0, 2);
+    -fx-opacity: 0.95;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-transition: all 0.3s ease;
+    -fx-min-width: 120px;
+    -fx-max-width: 150px;
+    -fx-background-color: linear-gradient(to right, #E53935, #EF5350);
+}
+
+.bgit {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 16 16 16 16;
+    -fx-background-radius: 18;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 10, 0.4, 0, 2);
+    -fx-opacity: 0.95;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-transition: all 0.3s ease;
+    -fx-min-width: 200px;
+    -fx-max-width: 220px;
+    -fx-background-color: linear-gradient(to right, #3366CC, #5599EE);
+}
+
+/* Asegurar que el texto se muestre sin puntos suspensivos */
+.bjugar .text, .bsalir .text, .bgit .text {
+    -fx-fill: white;
+    -fx-text-fill: white;
+    -fx-text-overrun: clip;
+}
+

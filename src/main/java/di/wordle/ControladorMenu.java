@@ -5,8 +5,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.AnchorPane;
@@ -21,22 +23,30 @@ import java.util.ResourceBundle;
 public class ControladorMenu {
 
     private HostServices hostServices;
+
     @FXML
     private AnchorPane fondo;
     @FXML
-    private Button btnJugar;
+    private Button bjugar;
     @FXML
-    private Button btnSalir;
+    private Button bsalir;
     @FXML
-    private Button btnGit;
+    private Button bgit;
 
+    @FXML
+    private ComboBox<String> comboIdioma;  // Añade esto (debe coincidir con fx:id en fxml)
 
     public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        // Rellenar combo con opciones, si no está hecho en fxml
+        if (comboIdioma != null) {
+            comboIdioma.getItems().clear();
+            comboIdioma.getItems().addAll("🇪🇸 Español", "🇬🇧 English", "🇬🇦 Galego");
+            comboIdioma.getSelectionModel().selectFirst();  // Seleccionar Español por defecto
+        }
     }
 
     public void salir(ActionEvent event) {
@@ -46,7 +56,19 @@ public class ControladorMenu {
 
     @FXML
     public void cargarPantalla1() throws IOException {
-        cargarPantalla("wordle.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(WordleApp.class.getResource("wordle.fxml"));
+        Parent root = fxmlLoader.load();
+        // Obtener el controlador del Wordle para pasar el idioma seleccionado
+        WordleController controladorWordle = fxmlLoader.getController();
+        String idiomaSeleccionado = comboIdioma.getSelectionModel().getSelectedItem();
+        controladorWordle.setIdiomaSeleccionado(idiomaSeleccionado);
+        controladorWordle.iniciarConIdioma();
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("estilos.css").toExternalForm());
+
+        Stage stage = (Stage) fondo.getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
@@ -58,14 +80,6 @@ public class ControladorMenu {
         }
     }
 
-    public void cargarPantalla(String pantalla) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(WordleApp.class.getResource(pantalla));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = (Stage) fondo.getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
     @FXML
     public void zoomIn(MouseEvent event) {
         Button btn = (Button) event.getSource();
@@ -73,12 +87,11 @@ public class ControladorMenu {
         btn.setScaleY(1.1);
 
         DropShadow shadow = new DropShadow();
-        shadow.setRadius(6);            // Aumenta el radio para que la sombra sea más grande
-        shadow.setOffsetX(2);           // Más desplazamiento horizontal
-        shadow.setOffsetY(2);           // Más desplazamiento vertical
-        shadow.setColor(Color.rgb(0, 0, 0, 0.85)); // Sombra más oscura y visible (85% opacidad)
+        shadow.setRadius(6);
+        shadow.setOffsetX(2);
+        shadow.setOffsetY(2);
+        shadow.setColor(Color.rgb(0, 0, 0, 0.85));
 
-        // Acceder al Label interno del Button y poner el efecto sólo en el texto
         Node textNode = btn.lookup(".text");
         if (textNode != null) {
             textNode.setEffect(shadow);
@@ -109,4 +122,3 @@ public class ControladorMenu {
         btn.setEffect(null);
     }
 }
-

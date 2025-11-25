@@ -6,9 +6,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -49,6 +51,11 @@ public class WordleController implements Initializable {
     private GridPane tablero;
     @FXML
     Label i1l1, i1l2, i1l3, i1l4, i1l5, i2l1, i2l2, i2l3, i2l4, i2l5, i3l1, i3l2, i3l3, i3l4, i3l5, i4l1, i4l2, i4l3, i4l4, i4l5, i5l1, i5l2, i5l3, i5l4, i5l5;
+
+    private String archivoPalabras = "/palabras.txt";  // Valor por defecto
+
+    private String idiomaSeleccionado;
+
 
     @FXML
     public void iniciarPartida() {
@@ -117,7 +124,12 @@ public class WordleController implements Initializable {
 
     public void volverMenu() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(WordleApp.class.getResource("menu.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+
+        // Añade la hoja de estilos para que se mantengan los estilos CSS
+        scene.getStylesheets().add(getClass().getResource("estilos.css").toExternalForm());
+
         Stage stage = (Stage) fondo.getScene().getWindow();
         stage.setScene(scene);
         stage.show();
@@ -144,12 +156,31 @@ public class WordleController implements Initializable {
         }
     }
 
+    public void setIdiomaSeleccionado(String idioma) {
+        this.idiomaSeleccionado = idioma;
+
+        // Aquí puedes configurar archivoPalabras según idioma, o justo en initialize
+        switch (idiomaSeleccionado) {
+            case "🇪🇸 Español":
+                archivoPalabras = "/palabras.txt";
+                break;
+            case "🇬🇧 English":
+                archivoPalabras = "/palabrasi.txt";
+                break;
+            case "🇬🇦 Galego":
+                archivoPalabras = "/palabrasg.txt";
+                break;
+            default:
+                archivoPalabras = "/palabras.txt";
+        }
+
+        System.out.println("Idioma para Wordle: " + idiomaSeleccionado + " - Archivo: " + archivoPalabras);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         casillaSeleccionada = i1l1;
         casillaSeleccionada.getStyleClass().add("activa");
-        palabraOculta = obtenerPalabraAleatoria();
-        System.out.println(palabraOculta);
         iniciarPartida();
         bplay.setVisible(false);
         bexit.setVisible(false);
@@ -185,20 +216,23 @@ public class WordleController implements Initializable {
         Platform.runLater(() -> {
             fondo.requestFocus();
         });
+
     }
 
-
+    public void iniciarConIdioma() {
+        palabraOculta = obtenerPalabraAleatoria();
+        System.out.println("Palabra oculta: " + palabraOculta);
+        iniciarPartida();
+    }
 
     private String obtenerPalabraAleatoria() {
-        try (InputStream is = getClass().getResourceAsStream("/palabras.txt")) {
+        try (InputStream is = getClass().getResourceAsStream(archivoPalabras)) {
             if (is == null) {
-                System.out.println("No se pudo encontrar palabras.txt dentro del JAR");
+                System.out.println("No se pudo encontrar " + archivoPalabras + " dentro del JAR");
                 return "ERROR";
             }
-            // Leer contenido
             String contenido = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
-            // Separar palabras
             String[] palabras = contenido.split("\\s+");
             List<String> palabrasFiltradas = Arrays.stream(palabras)
                     .filter(p -> p.length() == 5)
@@ -206,7 +240,6 @@ public class WordleController implements Initializable {
 
             if (palabrasFiltradas.isEmpty()) return "ERROR";
 
-            // Elegir palabra aleatoria
             Random random = new Random();
             return palabrasFiltradas.get(random.nextInt(palabrasFiltradas.size()));
 
@@ -215,6 +248,7 @@ public class WordleController implements Initializable {
             return "ERROR";
         }
     }
+
 
     public void desmarcarTodas() {
 
