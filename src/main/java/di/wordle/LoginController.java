@@ -26,6 +26,11 @@ public class LoginController {
 
     private UsuarioManager usuarioManager = new UsuarioManager();
 
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
+
+
     @FXML
     private void login(ActionEvent event) {
         String usuario = txtUsuario.getText().trim();
@@ -35,16 +40,21 @@ public class LoginController {
             mostrarAlerta("Error", "Debes rellenar usuario y contraseña.");
             return;
         }
-
+// Dentro de LoginController.login()
         if (usuarioManager.autenticarUsuario(usuario, password)) {
-            // Guardar usuario en sesión global
             Sesion.getInstancia().setUsuario(usuario);
             Sesion.getInstancia().resetTiempoSesion();
 
-
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("menu.fxml"));
-                Parent root = loader.load();  // Este load asigna el controlador automáticamente
+                Parent root = loader.load();
+
+                // Pasar HostServices al controlador menú
+                ControladorMenu menuController = loader.getController();
+                menuController.setHostServices(hostServices);
+
+                // Pero HostServices no está en LoginController, así que:
+                // Necesitarás que LoginController tenga un método setHostServices() y que WordleApp se lo pase.
 
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
@@ -56,13 +66,10 @@ public class LoginController {
 
                 ((Node) event.getSource()).getScene().getWindow().hide();
 
-
             } catch (IOException e) {
                 e.printStackTrace();
                 mostrarAlerta("Error", "No se pudo abrir la ventana del menú.");
             }
-        } else {
-            mostrarAlerta("Error", "Usuario o contraseña incorrectos.");
         }
     }
 
