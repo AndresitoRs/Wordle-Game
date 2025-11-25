@@ -376,3 +376,24 @@
     -fx-text-overrun: clip;
 }
 
+/* Archivo estilos.css o el que uses para tu app */
+
+.vbox-usuario-tiempo {
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+    -fx-padding: 15px 0 0 0;
+}
+
+#lblUsuarioSesion {
+    -fx-text-fill: #39FF14; /* verde fosforito */
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow( gaussian , rgba(57,255,20,0.7) , 8,0.5,0,0 );
+}
+
+#lblTiempoSesion {
+    -fx-text-fill: #3399FF; /* azul */
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+    -fx-effect: dropshadow( gaussian , rgba(51,153,255,0.7) , 6,0.5,0,0 );
+}

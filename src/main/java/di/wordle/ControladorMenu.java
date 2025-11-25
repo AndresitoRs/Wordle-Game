@@ -1,5 +1,10 @@
 package di.wordle;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.fxml.Initializable;
+import javafx.util.Duration;
+import javafx.scene.control.Label;
 import javafx.application.HostServices;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,45 +16,80 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import di.wordle.Sesion;
 
-public class ControladorMenu {
+
+public class ControladorMenu implements Initializable {
 
     private HostServices hostServices;
 
-    @FXML
-    private AnchorPane fondo;
-    @FXML
-    private Button bjugar;
-    @FXML
-    private Button bsalir;
-    @FXML
-    private Button bgit;
+    @FXML private AnchorPane fondo;
+    @FXML private Button bjugar;
+    @FXML private Button bsalir;
+    @FXML private Button bgit;
 
-    @FXML
-    private ComboBox<String> comboIdioma;  // Añade esto (debe coincidir con fx:id en fxml)
+    @FXML private ComboBox<String> comboIdioma;
+
+    @FXML private Label lblUsuarioSesion;
+    @FXML private Label lblTiempoSesion;
+
+    private Timeline timeline;
 
     public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
     }
 
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Rellenar combo con opciones, si no está hecho en fxml
         if (comboIdioma != null) {
             comboIdioma.getItems().clear();
             comboIdioma.getItems().addAll("🇪🇸 Español", "🇬🇧 English", "🇬🇦 Galego");
-            comboIdioma.getSelectionModel().selectFirst();  // Seleccionar Español por defecto
+            comboIdioma.getSelectionModel().selectFirst();
         }
+
+        // Mostrar usuario logueado y arrancar timer sesión
+        String usuario = Sesion.getInstancia().getUsuario();
+        System.out.println("Usuario recibido en menú: " + usuario);
+        if (usuario != null && !usuario.isEmpty()) {
+            lblUsuarioSesion.setText("Está identificado como: \"" + usuario + "\"");
+        } else {
+            lblUsuarioSesion.setText("No hay usuario identificado");
+        }
+
+        iniciarSesionTimer();
+    }
+
+    public void iniciarSesionTimer() {
+        // Asegurar que timeline anterior se detiene
+        if (timeline != null) {
+            timeline.stop();
+        }
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            // Incrementar contador global en Sesion
+            Sesion.getInstancia().incrementarTiempoSegundos();
+
+            // Obtener tiempo acumulado y mostrarlo
+            long segundosTotales = Sesion.getInstancia().getTiempoSegundos();
+            long minutos = segundosTotales / 60;
+            long segundos = segundosTotales % 60;
+
+            lblTiempoSesion.setText(String.format("Tiempo de sesión: %02d:%02d", minutos, segundos));
+        }));
+
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
     public void salir(ActionEvent event) {
+        detenerTimerSesion();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
@@ -58,13 +98,15 @@ public class ControladorMenu {
     public void cargarPantalla1() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(WordleApp.class.getResource("wordle.fxml"));
         Parent root = fxmlLoader.load();
-        // Obtener el controlador del Wordle para pasar el idioma seleccionado
+
         WordleController controladorWordle = fxmlLoader.getController();
         String idiomaSeleccionado = comboIdioma.getSelectionModel().getSelectedItem();
         controladorWordle.setIdiomaSeleccionado(idiomaSeleccionado);
         controladorWordle.iniciarConIdioma();
+
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("estilos.css").toExternalForm());
+        // CARGAR CSS IMPORTANTE
+        scene.getStylesheets().add(WordleApp.class.getResource("estilos.css").toExternalForm());
 
         Stage stage = (Stage) fondo.getScene().getWindow();
         stage.setScene(scene);
@@ -79,6 +121,14 @@ public class ControladorMenu {
             System.out.println("HostServices no está disponible.");
         }
     }
+
+    private void detenerTimerSesion() {
+        if (timeline != null) {
+            timeline.stop();
+        }
+    }
+
+    // Efectos botones
 
     @FXML
     public void zoomIn(MouseEvent event) {

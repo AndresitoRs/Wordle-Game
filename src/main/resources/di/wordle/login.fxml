@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="di.wordle.LoginController"
+      alignment="CENTER"
+      spacing="20"
+      style="-fx-background-color: linear-gradient(to bottom right, #4A90E2, #145DA0);"
+      prefWidth="400" prefHeight="500"
+      >
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <!-- Logo arriba, centrado -->
+    <ImageView fx:id="logo" fitWidth="120" fitHeight="120" pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="@img/wordlelogo.png"/>
+        </image>
+    </ImageView>
+
+    <!-- Título -->
+    <Label text="Bienvenido a Wordle" textAlignment="CENTER" textFill="white" style="-fx-font-weight: bold;">
+        <font>
+            <Font name="Segoe UI" size="26" />
+        </font>
+    </Label>
+
+    <VBox spacing="12" maxWidth="300" style="-fx-background-color: rgba(255,255,255,0.15); -fx-background-radius: 15; -fx-padding: 25;">
+
+        <Label text="Usuario" textFill="white">
+            <font>
+                <Font name="Segoe UI" size="14" />
+            </font>
+        </Label>
+        <TextField fx:id="txtUsuario" promptText="Introduce tu usuario"
+                   style="-fx-background-radius: 10; -fx-background-color: white;"/>
+
+        <Label text="Contraseña" textFill="white">
+            <padding>
+                <Insets top="0" right="0" bottom="0" left="5"/>
+            </padding>
+            <font>
+                <Font name="Segoe UI" size="14" />
+            </font>
+        </Label>
+        <PasswordField fx:id="txtPassword" promptText="Introduce tu contraseña"
+                       style="-fx-background-radius: 10; -fx-background-color: white;"/>
+
+        <Button text="Iniciar sesión" fx:id="btnLogin" onAction="#login"
+                style="-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;"
+                maxWidth="Infinity" prefHeight="40" />
+
+        <Label fx:id="lblError" textFill="#FF6B6B" visible="false" wrapText="true" textAlignment="CENTER" />
+    </VBox>
+
+    <Label text="¿No tienes cuenta? Regístrate" textFill="white" underline="true" cursor="$HAND" onMouseClicked="#registrar">
+        <font>
+            <Font name="Segoe UI" size="12" />
+        </font>
+    </Label>
+
+</VBox>

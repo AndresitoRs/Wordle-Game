@@ -51,7 +51,7 @@
                     </font>
                 </Button>
 
-                <Button fx:id="bsalir" onMouseEntered="#zoomIn" onMouseExited="#zoomOut" onMousePressed="#brilloOn" onMouseReleased="#brilloOff" prefHeight="66.0" prefWidth="358.0" styleClass="bsalir" text="Cerrar APP">
+                <Button fx:id="bsalir" onAction="#salir" onMouseEntered="#zoomIn" onMouseExited="#zoomOut" onMousePressed="#brilloOn" onMouseReleased="#brilloOff" prefHeight="66.0" prefWidth="358.0" styleClass="bsalir" text="Cerrar APP">
                     <font>
                         <Font name="Segoe UI" size="18.0" />
                     </font>
@@ -70,7 +70,15 @@
                     </font>
                 </Button>
             </children>
+
+            <VBox fx:id="vboxSesion" styleClass="vbox-usuario-tiempo" prefWidth="400" alignment="CENTER">
+                <children>
+                    <Label fx:id="lblUsuarioSesion" text="Usuario: " />
+                    <Label fx:id="lblTiempoSesion" text="Tiempo sesión: 00:00" />
+                </children>
+            </VBox>
         </VBox>
+
 
         <HBox alignment="CENTER" prefHeight="79.0" spacing="10" style="-fx-background-color: #222222; -fx-border-color: #444444; -fx-border-width: 0 0 2 0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>

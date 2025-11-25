@@ -12,7 +12,7 @@ import java.util.Objects;
 public class WordleApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(WordleApp.class.getResource("menu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(WordleApp.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 550, 670);
 
         // Cargar CSS (importante para que funcione el estilo del ComboBox)
@@ -21,8 +21,8 @@ public class WordleApp extends Application {
         );
 
         // Obtener controlador
-        ControladorMenu controlador = fxmlLoader.getController();
-        controlador.setHostServices(getHostServices());
+        LoginController controlador = fxmlLoader.getController();
+        //controlador.setHostServices(getHostServices());
 
         stage.setTitle("Wordle");
         stage.setScene(scene);
