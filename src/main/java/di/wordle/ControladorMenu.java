@@ -63,29 +63,22 @@ public class ControladorMenu implements Initializable {
             lblUsuarioSesion.setText("No hay usuario identificado");
         }
 
-        iniciarSesionTimer();
+        iniciarRefrescoVisual();
     }
 
-    public void iniciarSesionTimer() {
-        // Asegurar que timeline anterior se detiene
-        if (timeline != null) {
-            timeline.stop();
-        }
-
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            // Incrementar contador global en Sesion
-            Sesion.getInstancia().incrementarTiempoSegundos();
-
-            // Obtener tiempo acumulado y mostrarlo
+    public void iniciarRefrescoVisual() {
+        Timeline refresco = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             long segundosTotales = Sesion.getInstancia().getTiempoSegundos();
             long minutos = segundosTotales / 60;
             long segundos = segundosTotales % 60;
 
-            lblTiempoSesion.setText(String.format("Tiempo de sesión: %02d:%02d", minutos, segundos));
+            lblTiempoSesion.setText(
+                    String.format("Tiempo de sesión: %02d:%02d", minutos, segundos)
+            );
         }));
 
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        refresco.setCycleCount(Timeline.INDEFINITE);
+        refresco.play();
     }
 
     public void salir(ActionEvent event) {

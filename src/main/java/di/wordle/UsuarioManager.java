@@ -1,64 +1,210 @@
 package di.wordle;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.io.*;
-import java.lang.reflect.Type;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import di.wordle.db.Database;
+import org.bson.Document;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
 
 public class UsuarioManager {
 
-    private static final String ARCHIVO_USUARIOS = "usuarios.json";
-    private List<Usuario> usuarios;
-    private Gson gson = new Gson();
-
     public UsuarioManager() {
-        usuarios = cargarUsuarios();
+        crearTablaSiNoExiste();
     }
 
-    private List<Usuario> cargarUsuarios() {
-        try (Reader reader = new InputStreamReader(new FileInputStream(ARCHIVO_USUARIOS), StandardCharsets.UTF_8)) {
-            Type listType = new TypeToken<ArrayList<Usuario>>(){}.getType();
-            List<Usuario> list = gson.fromJson(reader, listType);
-            return list != null ? list : new ArrayList<>();
-        } catch (IOException e) {
-            return new ArrayList<>();
-        }
-    }
-
-    private void guardarUsuarios() {
-        try (Writer writer = new OutputStreamWriter(new FileOutputStream(ARCHIVO_USUARIOS), StandardCharsets.UTF_8)) {
-            gson.toJson(usuarios, writer);
-        } catch (IOException e) {
+    private void crearTablaSiNoExiste() {
+        String sql = "CREATE TABLE IF NOT EXISTS usuarios (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "nombre TEXT UNIQUE NOT NULL," +
+                "password TEXT NOT NULL" +
+                ");";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.execute();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean registrarUsuario(String usuario, String password) {
-        if (buscarUsuario(usuario) != null) {
-            return false; // Usuario ya existe
+    public void sincronizarUsuarioEnMongo(long usuarioId, String nombre) {
+        MongoDatabase db = ConexionMongo.getDatabase();
+        MongoCollection<Document> usuarios = db.getCollection("usuarios");
+        MongoCollection<Document> estadisticasMongo = db.getCollection("estadisticas");
+
+        // Buscar si ya existe el usuario en mongo:
+        Document usuarioMongo = usuarios.find(Filters.eq("id", usuarioId)).first();
+
+        if (usuarioMongo == null) {
+            // No existe, lo creamos:
+            Document nuevoUsuario = new Document()
+                    .append("id", usuarioId)
+                    .append("nombre", nombre);
+            usuarios.insertOne(nuevoUsuario);
+            System.out.println("Usuario creado en MongoDB");
+
+            // Ahora buscamos estadísticas en SQLite para este usuario:
+            try (Connection conn = Database.getConnection()) {
+                var stmt = conn.prepareStatement(
+                        "SELECT partidas_jugadas, partidas_ganadas, mejor_puntuacion, tiempo_total FROM estadisticas WHERE usuario_id = ?");
+                stmt.setLong(1, usuarioId);
+                var rs = stmt.executeQuery();
+                if (rs.next()) {
+                    Document estadisticasDoc = new Document()
+                            .append("usuario_id", usuarioId)
+                            .append("partidas_jugadas", rs.getInt("partidas_jugadas"))
+                            .append("partidas_ganadas", rs.getInt("partidas_ganadas"))
+                            .append("mejor_puntuacion", rs.getInt("mejor_puntuacion"))
+                            .append("tiempo_total", rs.getLong("tiempo_total"));
+                    estadisticasMongo.insertOne(estadisticasDoc);
+                    System.out.println("Estadísticas creadas en MongoDB");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Usuario ya existe en MongoDB");
+            // Si quieres, aquí podrías actualizar datos si lo deseas
         }
-        String hash = hashPassword(password);
-        usuarios.add(new Usuario(usuario, hash));
-        guardarUsuarios();
-        return true;
     }
 
-    public boolean autenticarUsuario(String usuario, String password) {
-        Usuario u = buscarUsuario(usuario);
-        if (u == null) return false;
+    public boolean registrarUsuario(String nombre, String password) {
         String hash = hashPassword(password);
-        return u.getPasswordHash().equals(hash);
+        try (Connection conn = Database.getConnection()) {
+            conn.setAutoCommit(false);
+
+            var stmtUser = conn.prepareStatement(
+                    "INSERT INTO usuarios (nombre, password) VALUES (?, ?)",
+                    Statement.RETURN_GENERATED_KEYS
+            );
+            stmtUser.setString(1, nombre);
+            stmtUser.setString(2, hash);
+            int affectedRows = stmtUser.executeUpdate();
+
+            if (affectedRows == 0) {
+                conn.rollback();
+                return false;
+            }
+
+            ResultSet generatedKeys = stmtUser.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                long usuarioId = generatedKeys.getLong(1);
+
+                var stmtStats = conn.prepareStatement(
+                        "INSERT INTO estadisticas (usuario_id, partidas_jugadas, partidas_ganadas, mejor_puntuacion, tiempo_total, ultima_partida) " +
+                                "VALUES (?, 0, 0, 0, 0, NULL)"
+                );
+                stmtStats.setLong(1, usuarioId);
+                stmtStats.executeUpdate();
+
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    private Usuario buscarUsuario(String usuario) {
-        return usuarios.stream()
-                .filter(u -> u.getUsuario().equalsIgnoreCase(usuario))
-                .findFirst()
-                .orElse(null);
+    public boolean autenticarUsuario(String nombre, String password) {
+        String sql = "SELECT password FROM usuarios WHERE nombre = ?";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String hashEnBD = rs.getString("password");
+                String hashPassword = hashPassword(password);
+                return hashEnBD.equals(hashPassword);
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean existeUsuario(String nombre) {
+        String sql = "SELECT 1 FROM usuarios WHERE nombre = ?";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, nombre);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void insertarPartida(long usuarioId, String resultado, int intentos, String palabraJugado) {
+        String fecha = java.time.LocalDateTime.now().toString();
+
+        try (Connection conn = Database.getConnection()) {
+            var stmt = conn.prepareStatement(
+                    "INSERT INTO partidas (usuario_id, fecha, resultado, intentos, palabra_jugada) VALUES (?, ?, ?, ?, ?)"
+            );
+            stmt.setLong(1, usuarioId);
+            stmt.setString(2, fecha);
+            stmt.setString(3, resultado);
+            stmt.setInt(4, intentos);
+            stmt.setString(5, palabraJugado);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void actualizarEstadisticas(long usuarioId, boolean gano, int puntosObtenidos, long tiempoPartidaSegundos) {
+        try (Connection conn = Database.getConnection()) {
+            var stmtSelect = conn.prepareStatement(
+                    "SELECT partidas_jugadas, partidas_ganadas, mejor_puntuacion, tiempo_total FROM estadisticas WHERE usuario_id = ?"
+            );
+            stmtSelect.setLong(1, usuarioId);
+            ResultSet rs = stmtSelect.executeQuery();
+
+            if (rs.next()) {
+                int partidasJugadas = rs.getInt("partidas_jugadas") + 1;
+                int partidasGanadas = rs.getInt("partidas_ganadas") + (gano ? 1 : 0);
+                int mejorPuntuacion = Math.max(rs.getInt("mejor_puntuacion"), puntosObtenidos);
+                long tiempoTotal = rs.getLong("tiempo_total") + tiempoPartidaSegundos;
+
+                var stmtUpdate = conn.prepareStatement(
+                        "UPDATE estadisticas SET partidas_jugadas = ?, partidas_ganadas = ?, mejor_puntuacion = ?, tiempo_total = ?, ultima_partida = ? WHERE usuario_id = ?"
+                );
+                stmtUpdate.setInt(1, partidasJugadas);
+                stmtUpdate.setInt(2, partidasGanadas);
+                stmtUpdate.setInt(3, mejorPuntuacion);
+                stmtUpdate.setLong(4, tiempoTotal);
+                stmtUpdate.setString(5, java.time.LocalDateTime.now().toString());
+                stmtUpdate.setLong(6, usuarioId);
+
+                stmtUpdate.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Long obtenerUsuarioId(String nombre) {
+        try (Connection conn = Database.getConnection()) {
+            var stmt = conn.prepareStatement("SELECT id FROM usuarios WHERE nombre = ?");
+            stmt.setString(1, nombre);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getLong("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private String hashPassword(String password) {
@@ -73,5 +219,18 @@ public class UsuarioManager {
         } catch (Exception e) {
             throw new RuntimeException("Error hashing password", e);
         }
+    }
+
+    public void guardarUsuarioEnMongo(int id, String nombre, String password) {
+        MongoDatabase db = ConexionMongo.getDatabase();
+        MongoCollection<Document> usuarios = db.getCollection("usuarios");
+
+        Document usuarioDoc = new Document()
+                .append("id", id)
+                .append("nombre", nombre)
+                .append("password", password);
+
+        usuarios.insertOne(usuarioDoc);
+        System.out.println("Usuario guardado en MongoDB.");
     }
 }

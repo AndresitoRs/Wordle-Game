@@ -1,5 +1,4 @@
 package di.wordle;
-import di.wordle.Sesion;
 
 import javafx.application.HostServices;
 import javafx.fxml.FXML;
@@ -21,6 +20,7 @@ public class LoginController {
     private TextField txtUsuario;
 
     private HostServices hostServices;
+
     @FXML
     private PasswordField txtPassword;
 
@@ -29,7 +29,6 @@ public class LoginController {
     public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
     }
-
 
     @FXML
     private void login(ActionEvent event) {
@@ -40,10 +39,24 @@ public class LoginController {
             mostrarAlerta("Error", "Debes rellenar usuario y contraseña.");
             return;
         }
-// Dentro de LoginController.login()
+
+        // Primero comprobamos si el usuario existe
+        if (!usuarioManager.existeUsuario(usuario)) {
+            mostrarAlerta("Error", "El usuario no existe. Debes registrarte primero.");
+            return;
+        }
+
+        // Ahora comprobamos si la contraseña es correcta
         if (usuarioManager.autenticarUsuario(usuario, password)) {
             Sesion.getInstancia().setUsuario(usuario);
             Sesion.getInstancia().resetTiempoSesion();
+            Sesion.getInstancia().iniciarTimerGlobal();
+
+            // **AÑADIDO: sincronizar usuario en Mongo justo aquí**
+            Long usuarioId = usuarioManager.obtenerUsuarioId(usuario);
+            if (usuarioId != null) {
+                usuarioManager.sincronizarUsuarioEnMongo(usuarioId.intValue(), usuario);
+            }
 
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("menu.fxml"));
@@ -52,9 +65,6 @@ public class LoginController {
                 // Pasar HostServices al controlador menú
                 ControladorMenu menuController = loader.getController();
                 menuController.setHostServices(hostServices);
-
-                // Pero HostServices no está en LoginController, así que:
-                // Necesitarás que LoginController tenga un método setHostServices() y que WordleApp se lo pase.
 
                 Stage stage = new Stage();
                 Scene scene = new Scene(root);
@@ -70,9 +80,10 @@ public class LoginController {
                 e.printStackTrace();
                 mostrarAlerta("Error", "No se pudo abrir la ventana del menú.");
             }
+        } else {
+            mostrarAlerta("Error", "Contraseña incorrecta.");
         }
     }
-
 
     @FXML
     private void registrar() {

@@ -1,5 +1,6 @@
 package di.wordle;
 
+import di.wordle.db.Database;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,17 +12,28 @@ import java.net.URL;
 import java.util.Objects;
 
 public class WordleApp extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(WordleApp.class.getResource("login.fxml"));
+        Database.inicializar();
+        // Cargar FXML de forma segura
+        URL fxml = Objects.requireNonNull(
+                WordleApp.class.getResource("/di/wordle/login.fxml"),
+                "No se pudo encontrar login.fxml"
+        );
+
+        FXMLLoader fxmlLoader = new FXMLLoader(fxml);
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root, 550, 670);
 
-        scene.getStylesheets().add(
-                WordleApp.class.getResource("estilos.css").toExternalForm()
+        // Cargar el CSS de forma segura
+        URL css = Objects.requireNonNull(
+                WordleApp.class.getResource("/di/wordle/estilos.css"),
+                "No se pudo encontrar estilos.css"
         );
+        scene.getStylesheets().add(css.toExternalForm());
 
-        // Pasar HostServices al LoginController
+        // Pasar HostServices al controlador
         LoginController controlador = fxmlLoader.getController();
         controlador.setHostServices(getHostServices());
 

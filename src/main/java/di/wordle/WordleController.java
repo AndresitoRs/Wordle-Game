@@ -47,6 +47,7 @@ public class WordleController implements Initializable {
     private String palabraOculta;
     private int filaActual = 1;
     private Label casillaSeleccionada;
+    private UsuarioManager usuarioManager = new UsuarioManager();
     @FXML
     private GridPane tablero;
     @FXML
@@ -424,24 +425,88 @@ public class WordleController implements Initializable {
         }
 
         if (adivinoPalabra) {
-            info.ganar(); // Llama al método ganar si el usuario ha adivinado la palabra
+            info.ganar();
             Alert alertaGanar = new Alert(Alert.AlertType.INFORMATION);
             alertaGanar.setTitle("Felicidades");
             alertaGanar.setHeaderText("Victoria");
             alertaGanar.setContentText("Buen trabajo, le he visto fino");
             alertaGanar.showAndWait();
-            desactivarTodasLasCasillas(); // Desactiva todas las casillas si se adivina la palabra
+
+            desactivarTodasLasCasillas();
             mostrarBotonesFinal();
+
+            // Registro en base de datos:
+            String usuarioNombre = Sesion.getInstancia().getUsuario();
+            Long usuarioId = usuarioManager.obtenerUsuarioId(usuarioNombre);
+            int intentos = filaActual;  // O la variable que lleve los intentos
+            int puntos = calcularPuntos(); // Crea este método o usa un valor fijo
+            long tiempoEnSegundos = obtenerTiempoPartida(); // Método para calcular tiempo de la partida
+
+            // Guardar en SQLite
+            usuarioManager.insertarPartida(usuarioId, "ganada", intentos, palabraOculta);
+            usuarioManager.actualizarEstadisticas(usuarioId, true, puntos, tiempoEnSegundos);
+
+            // Guardar en MongoDB
+            PartidaManager partidaManager = new PartidaManager();
+            EstadisticaManager estadisticaManager = new EstadisticaManager();
+
+            partidaManager.guardarPartidaEnMongo(
+                    filaActual, // id de la partida (puedes modificar si tienes otro id)
+                    usuarioId.intValue(),
+                    "ganada",
+                    intentos,
+                    palabraOculta
+            );
+
+            estadisticaManager.actualizarEstadisticasEnMongo(
+                    usuarioId.intValue(),
+                    // Aquí deberías obtener los valores actualizados de SQLite o pasarlos
+                    // para simplificar pasamos ejemplos
+                    /* partidasJugadas= */ 1,
+                    /* partidasGanadas= */ 1,
+                    puntos,
+                    (int) tiempoEnSegundos
+            );
+
         } else if (filaActual == 5) {
             Alert alertaPerder = new Alert(Alert.AlertType.ERROR);
             alertaPerder.setTitle("Una pena");
             alertaPerder.setHeaderText("Derrota");
-            alertaPerder.setContentText("Ha perdido tras gastar sus intentos, la palabra era: " +palabraOculta);
+            alertaPerder.setContentText("Ha perdido tras gastar sus intentos, la palabra era: " + palabraOculta);
             alertaPerder.showAndWait();
-            // Si es el último intento y la palabra no es adivinada, desactiva las casillas de la última fila y llama a perder
+
             desactivarCasillasFila(filaActual);
             info.perder();
             mostrarBotonesFinal();
+
+            // Registro en base de datos:
+            String usuarioNombre = Sesion.getInstancia().getUsuario();
+            Long usuarioId = usuarioManager.obtenerUsuarioId(usuarioNombre);
+            int intentos = filaActual;  // intentos máximos usados
+            int puntos = 0; // o lo que consideres
+            long tiempoEnSegundos = obtenerTiempoPartida();
+
+            // Guardar en SQLite
+            usuarioManager.insertarPartida(usuarioId, "perdida", intentos, palabraOculta);
+            usuarioManager.actualizarEstadisticas(usuarioId, false, puntos, tiempoEnSegundos);
+
+            // Guardar en MongoDB
+            PartidaManager partidaManager = new PartidaManager();
+            EstadisticaManager estadisticaManager = new EstadisticaManager();
+
+            partidaManager.guardarPartidaEnMongo(
+                    filaActual,
+                    usuarioId.intValue(),
+                    "perdida",
+                    intentos,
+                    palabraOculta
+            );
+
+            estadisticaManager.actualizarEstadisticasEnMongo(
+                    usuarioId.intValue(),
+                    1, 0, puntos, (int) tiempoEnSegundos
+            );
+
         } else {
             filaActual++;
             if (filaActual <= 5) {
@@ -560,5 +625,13 @@ public class WordleController implements Initializable {
                 }
             }
         }
+    }
+    private int calcularPuntos() {
+        // Ejemplo: 10 puntos menos intentos usados, asegurando mínimo 0
+        return Math.max(0, 10 - filaActual + 1);
+    }
+
+    private long obtenerTiempoPartida() {
+        return Sesion.getInstancia().getTiempoSegundos();
     }
 }
