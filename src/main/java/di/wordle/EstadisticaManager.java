@@ -9,21 +9,36 @@ import org.bson.Document;
 
 public class EstadisticaManager {
 
-    public void actualizarEstadisticasEnMongo(int usuarioId, int partidasJugadas, int partidasGanadas, int puntos, int tiempoJugado) {
+    public void actualizarEstadisticasEnMongo(int usuarioId, boolean gano, int puntos, int tiempoJugado) {
         MongoDatabase db = ConexionMongo.getDatabase();
         MongoCollection<Document> estadisticas = db.getCollection("estadisticas");
 
-        UpdateResult result = estadisticas.updateOne(
-                Filters.eq("usuario_id", usuarioId),
-                Updates.combine(
-                        Updates.set("partidas_jugadas", partidasJugadas),
-                        Updates.set("partidas_ganadas", partidasGanadas),
-                        Updates.set("puntos", puntos),
-                        Updates.set("tiempo_jugado", tiempoJugado)
-                )
-        );
+        // Buscar el documento actual para este usuario
+        Document actual = estadisticas.find(Filters.eq("usuario_id", usuarioId)).first();
 
-        if (result.getMatchedCount() == 0) {
+        int partidasJugadas = 1;
+        int partidasGanadas = gano ? 1 : 0;
+
+        if (actual != null) {
+            // Leer valores actuales y sumarlos
+            partidasJugadas += actual.getInteger("partidas_jugadas", 0);
+            partidasGanadas += actual.getInteger("partidas_ganadas", 0);
+            puntos += actual.getInteger("puntos", 0);
+            tiempoJugado += actual.getInteger("tiempo_jugado", 0);
+
+            // Actualizar el documento
+            estadisticas.updateOne(
+                    Filters.eq("usuario_id", usuarioId),
+                    Updates.combine(
+                            Updates.set("partidas_jugadas", partidasJugadas),
+                            Updates.set("partidas_ganadas", partidasGanadas),
+                            Updates.set("puntos", puntos),
+                            Updates.set("tiempo_jugado", tiempoJugado)
+                    )
+            );
+            System.out.println("Estadísticas actualizadas en MongoDB.");
+        } else {
+            // Si no existe, crea un nuevo documento
             Document nuevo = new Document()
                     .append("usuario_id", usuarioId)
                     .append("partidas_jugadas", partidasJugadas)
@@ -32,8 +47,6 @@ public class EstadisticaManager {
                     .append("tiempo_jugado", tiempoJugado);
             estadisticas.insertOne(nuevo);
             System.out.println("Estadísticas creadas en MongoDB.");
-        } else {
-            System.out.println("Estadísticas actualizadas en MongoDB.");
         }
     }
 }

@@ -19,7 +19,7 @@ public class Database {
             String sqlUsuarios = "CREATE TABLE IF NOT EXISTS usuarios (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "nombre TEXT UNIQUE NOT NULL," +
-                    "password_hash TEXT NOT NULL" +
+                    "password TEXT NOT NULL" +
                     ");";
 
             String sqlEstadisticas = "CREATE TABLE IF NOT EXISTS estadisticas (" +
@@ -46,8 +46,11 @@ public class Database {
             String sqlPalabras = "CREATE TABLE IF NOT EXISTS palabras (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "palabra TEXT UNIQUE NOT NULL," +
-                    "dificultad INTEGER DEFAULT 1" +
+                    "veces_usada INTEGER DEFAULT 0," +
+                    "veces_acertada INTEGER DEFAULT 0," +
+                    "fecha_agregada TEXT DEFAULT CURRENT_TIMESTAMP" +
                     ");";
+
 
             stmt.execute(sqlUsuarios);
             stmt.execute(sqlEstadisticas);

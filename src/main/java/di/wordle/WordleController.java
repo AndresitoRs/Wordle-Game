@@ -232,6 +232,7 @@ public class WordleController implements Initializable {
                 System.out.println("No se pudo encontrar " + archivoPalabras + " dentro del JAR");
                 return "ERROR";
             }
+
             String contenido = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
             String[] palabras = contenido.split("\\s+");
@@ -242,7 +243,21 @@ public class WordleController implements Initializable {
             if (palabrasFiltradas.isEmpty()) return "ERROR";
 
             Random random = new Random();
-            return palabrasFiltradas.get(random.nextInt(palabrasFiltradas.size()));
+            String palabraElegida = palabrasFiltradas.get(random.nextInt(palabrasFiltradas.size()));
+
+            PalabraManager palabraManager = new PalabraManager();
+
+            // La inserta si no existe (no rompe nada si ya está)
+            palabraManager.insertarPalabra(palabraElegida.toLowerCase());
+
+            // Incrementa SOLO cuando se selecciona para jugar
+            palabraManager.incrementarVecesUsada(palabraElegida);
+
+            // Si usas sincronización con Mongo
+            palabraManager.obtenerPalabra(palabraElegida)
+                    .ifPresent(palabraManager::sincronizarPalabraEnMongo);
+
+            return palabraElegida;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -357,15 +372,13 @@ public class WordleController implements Initializable {
             }
         }
 
-        // Si la fila actual no está completa, muestra un mensaje de advertencia
         if (!filaCompleta) {
             Alert alertaInfo = new Alert(Alert.AlertType.INFORMATION);
             alertaInfo.setTitle("Ojo");
             alertaInfo.setHeaderText("Cuidado");
-            alertaInfo.setContentText("Sus filas no están completadas, o esta usted haciendo trampas, así que por favor, " +
-                    "completa todas las casillas de la fila actual antes de comprobar la palabra o deje de intentar hacer trampa.");
+            alertaInfo.setContentText("Sus filas no están completadas, o está haciendo trampas, por favor complete todas las casillas antes de comprobar la palabra.");
             alertaInfo.showAndWait();
-            return; // Salimos del método ya que no se cumplen los requisitos
+            return; // Salimos del método
         }
 
         StringBuilder palabraIntroducida = new StringBuilder();
@@ -379,7 +392,6 @@ public class WordleController implements Initializable {
         String palabraUsuario = palabraIntroducida.toString().toUpperCase();
         boolean adivinoPalabra = true;
 
-        // Array para llevar un seguimiento de las letras de la palabra oculta que ya han sido usadas
         boolean[] letrasUsadas = new boolean[5];
 
         for (int col = 0; col < 5; col++) {
@@ -389,16 +401,14 @@ public class WordleController implements Initializable {
             char letraOculta = palabraOculta.charAt(col);
 
             if (letraUsuario == letraOculta) {
-                // Si la letra coincide exactamente en la posición correcta, cambia a "correcta"
                 casilla.getStyleClass().removeAll("normal", "existe");
                 casilla.getStyleClass().add("correcta");
-                letrasUsadas[col] = true; // Marca la letra como usada
+                letrasUsadas[col] = true;
             } else {
                 adivinoPalabra = false;
             }
         }
 
-        // Segundo pase: marcar letras existentes pero no en la posición correcta
         for (int col = 0; col < 5; col++) {
             String casillaId = "i" + filaActual + "l" + (col + 1);
             Label casilla = (Label) tablero.lookup("#" + casillaId);
@@ -409,7 +419,7 @@ public class WordleController implements Initializable {
                 for (int i = 0; i < 5; i++) {
                     if (!letrasUsadas[i] && palabraOculta.charAt(i) == letraUsuario) {
                         letraEncontrada = true;
-                        letrasUsadas[i] = true; // Marca la letra como usada
+                        letrasUsadas[i] = true;
                         break;
                     }
                 }
@@ -424,7 +434,30 @@ public class WordleController implements Initializable {
             }
         }
 
+        // Datos comunes
+        String usuarioNombre = Sesion.getInstancia().getUsuario();
+        Long usuarioId = usuarioManager.obtenerUsuarioId(usuarioNombre);
+        int intentos = filaActual;
+        int puntos = calcularPuntos();
+        long tiempoEnSegundos = obtenerTiempoPartida();
+
+        PartidaManager partidaManager = new PartidaManager();
+        EstadisticaManager estadisticaManager = new EstadisticaManager();
+        PalabraManager palabraManager = new PalabraManager();
+
+        // Insertar o actualizar la palabra en SQLite y sincronizar en Mongo
         if (adivinoPalabra) {
+            palabraManager.palabraAcertada(palabraOculta.toLowerCase());
+
+            palabraManager.obtenerPalabra(palabraOculta.toLowerCase()).ifPresent(p -> {
+                System.out.println("Veces acertada ahora: " + p.getVecesAcertada());
+
+                // Actualizar "a pelo" en la BD con el valor que tiene + 1
+                int nuevoValor = p.getVecesAcertada() + 1;
+                palabraManager.actualizarVecesAcertada(p.getPalabra(), nuevoValor);
+            });
+
+
             info.ganar();
             Alert alertaGanar = new Alert(Alert.AlertType.INFORMATION);
             alertaGanar.setTitle("Felicidades");
@@ -435,38 +468,13 @@ public class WordleController implements Initializable {
             desactivarTodasLasCasillas();
             mostrarBotonesFinal();
 
-            // Registro en base de datos:
-            String usuarioNombre = Sesion.getInstancia().getUsuario();
-            Long usuarioId = usuarioManager.obtenerUsuarioId(usuarioNombre);
-            int intentos = filaActual;  // O la variable que lleve los intentos
-            int puntos = calcularPuntos(); // Crea este método o usa un valor fijo
-            long tiempoEnSegundos = obtenerTiempoPartida(); // Método para calcular tiempo de la partida
-
             // Guardar en SQLite
             usuarioManager.insertarPartida(usuarioId, "ganada", intentos, palabraOculta);
             usuarioManager.actualizarEstadisticas(usuarioId, true, puntos, tiempoEnSegundos);
 
             // Guardar en MongoDB
-            PartidaManager partidaManager = new PartidaManager();
-            EstadisticaManager estadisticaManager = new EstadisticaManager();
-
-            partidaManager.guardarPartidaEnMongo(
-                    filaActual, // id de la partida (puedes modificar si tienes otro id)
-                    usuarioId.intValue(),
-                    "ganada",
-                    intentos,
-                    palabraOculta
-            );
-
-            estadisticaManager.actualizarEstadisticasEnMongo(
-                    usuarioId.intValue(),
-                    // Aquí deberías obtener los valores actualizados de SQLite o pasarlos
-                    // para simplificar pasamos ejemplos
-                    /* partidasJugadas= */ 1,
-                    /* partidasGanadas= */ 1,
-                    puntos,
-                    (int) tiempoEnSegundos
-            );
+            partidaManager.guardarPartidaEnMongo(intentos, usuarioId.intValue(), "ganada", intentos, palabraOculta);
+            estadisticaManager.actualizarEstadisticasEnMongo(usuarioId.intValue(), true, puntos, (int) tiempoEnSegundos);
 
         } else if (filaActual == 5) {
             Alert alertaPerder = new Alert(Alert.AlertType.ERROR);
@@ -479,33 +487,13 @@ public class WordleController implements Initializable {
             info.perder();
             mostrarBotonesFinal();
 
-            // Registro en base de datos:
-            String usuarioNombre = Sesion.getInstancia().getUsuario();
-            Long usuarioId = usuarioManager.obtenerUsuarioId(usuarioNombre);
-            int intentos = filaActual;  // intentos máximos usados
-            int puntos = 0; // o lo que consideres
-            long tiempoEnSegundos = obtenerTiempoPartida();
-
             // Guardar en SQLite
             usuarioManager.insertarPartida(usuarioId, "perdida", intentos, palabraOculta);
-            usuarioManager.actualizarEstadisticas(usuarioId, false, puntos, tiempoEnSegundos);
+            usuarioManager.actualizarEstadisticas(usuarioId, false, 0, tiempoEnSegundos);
 
             // Guardar en MongoDB
-            PartidaManager partidaManager = new PartidaManager();
-            EstadisticaManager estadisticaManager = new EstadisticaManager();
-
-            partidaManager.guardarPartidaEnMongo(
-                    filaActual,
-                    usuarioId.intValue(),
-                    "perdida",
-                    intentos,
-                    palabraOculta
-            );
-
-            estadisticaManager.actualizarEstadisticasEnMongo(
-                    usuarioId.intValue(),
-                    1, 0, puntos, (int) tiempoEnSegundos
-            );
+            partidaManager.guardarPartidaEnMongo(intentos, usuarioId.intValue(), "perdida", intentos, palabraOculta);
+            estadisticaManager.actualizarEstadisticasEnMongo(usuarioId.intValue(), false, 0, (int) tiempoEnSegundos);
 
         } else {
             filaActual++;
@@ -522,6 +510,7 @@ public class WordleController implements Initializable {
             }
         }
     }
+
 
     private void desactivarCasillasFila(int fila) {
         for (int col = 1; col <= 5; col++) {
