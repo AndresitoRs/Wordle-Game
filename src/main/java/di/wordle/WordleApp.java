@@ -37,7 +37,7 @@ public class WordleApp extends Application {
         LoginController controlador = fxmlLoader.getController();
         controlador.setHostServices(getHostServices());
 
-        stage.setTitle("Wordle");
+        stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
     }

@@ -147,15 +147,14 @@ public class PalabraManager {
         String sql = "UPDATE palabras SET veces_acertada = veces_acertada + 1 WHERE palabra = ?";
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            conn.setAutoCommit(false);  // Desactivar autocommit para control manual
             stmt.setString(1, palabra.toLowerCase());
             int filasActualizadas = stmt.executeUpdate();
-            conn.commit();  // Forzar commit de la transacción
             System.out.println("palabraAcertada: filas actualizadas = " + filasActualizadas);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     public void actualizarVecesAcertada(String palabra, int veces) {
         String sql = "UPDATE palabras SET veces_acertada = ? WHERE palabra = ?";

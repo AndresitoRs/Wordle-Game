@@ -1,6 +1,3 @@
-apple beach brave
-candy chair dream
-eagle earth flame
 glove heart house
 jelly knife light
 mango movie night
@@ -13,3 +10,6 @@ whale wheat write
 yacht young zebra
 angel blush climb
 dance frost grape
+apple beach brave
+candy chair dream
+earth flame eagle

@@ -447,16 +447,16 @@ public class WordleController implements Initializable {
 
         // Insertar o actualizar la palabra en SQLite y sincronizar en Mongo
         if (adivinoPalabra) {
+            // Insertar palabra si no existe para evitar que UPDATE no afecte filas
+            palabraManager.insertarPalabra(palabraOculta.toLowerCase());
+
+            // Ahora sí incrementa veces_acertada
             palabraManager.palabraAcertada(palabraOculta.toLowerCase());
 
             palabraManager.obtenerPalabra(palabraOculta.toLowerCase()).ifPresent(p -> {
                 System.out.println("Veces acertada ahora: " + p.getVecesAcertada());
-
-                // Actualizar "a pelo" en la BD con el valor que tiene + 1
-                int nuevoValor = p.getVecesAcertada() + 1;
-                palabraManager.actualizarVecesAcertada(p.getPalabra(), nuevoValor);
+                palabraManager.sincronizarPalabraEnMongo(p);
             });
-
 
             info.ganar();
             Alert alertaGanar = new Alert(Alert.AlertType.INFORMATION);

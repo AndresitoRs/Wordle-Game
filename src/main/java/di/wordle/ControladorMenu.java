@@ -103,7 +103,9 @@ public class ControladorMenu implements Initializable {
 
         Stage stage = (Stage) fondo.getScene().getWindow();
         stage.setScene(scene);
+        stage.setTitle("Wordle");
         stage.show();
+
     }
 
     @FXML
