@@ -67,7 +67,6 @@ public class UsuarioManager {
             }
         } else {
             System.out.println("Usuario ya existe en MongoDB");
-            // Si quieres, aquí podrías actualizar datos si lo deseas
         }
     }
 

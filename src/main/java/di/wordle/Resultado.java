@@ -45,7 +45,6 @@ public class Resultado extends AnchorPane {
         controlador.lanzarHumoDerrota();
     }
 
-
     public void limpiar() {
         controlador.getImagen().setImage(null);
     }

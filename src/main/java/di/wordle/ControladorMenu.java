@@ -111,7 +111,7 @@ public class ControladorMenu implements Initializable {
     @FXML
     public void cargarPantalla2() throws IOException {
         if (hostServices != null) {
-            hostServices.showDocument("https://github.com/AndresitoRs/Wordle-Game");
+            hostServices.showDocument("https://github.com/AndresitoRs/Wordle-Game/tree/master");
         } else {
             System.out.println("HostServices no está disponible.");
         }
