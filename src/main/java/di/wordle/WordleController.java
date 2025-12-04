@@ -182,7 +182,6 @@ public class WordleController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         casillaSeleccionada = i1l1;
         casillaSeleccionada.getStyleClass().add("activa");
-        iniciarPartida();
         bplay.setVisible(false);
         bexit.setVisible(false);
         info.limpiar();
