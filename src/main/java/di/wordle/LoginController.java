@@ -55,6 +55,7 @@ public class LoginController {
             // **AÑADIDO: sincronizar usuario en Mongo justo aquí**
             Long usuarioId = usuarioManager.obtenerUsuarioId(usuario);
             if (usuarioId != null) {
+                Sesion.getInstancia().setUsuarioId(usuarioId.intValue()); // <-- guardar ID real en sesión
                 usuarioManager.sincronizarUsuarioEnMongo(usuarioId.intValue(), usuario);
             }
 

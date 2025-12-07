@@ -10,6 +10,8 @@ public class Sesion {
     private String usuario;
     private long tiempoSegundos = 0;
     private Timeline timeline;
+    private int usuarioId; // nuevo campo
+
 
     private Sesion() {}
 
@@ -19,6 +21,10 @@ public class Sesion {
         }
         return instancia;
     }
+
+    public void setUsuarioId(int id) { this.usuarioId = id; }
+
+    public int getUsuarioId() { return usuarioId; }
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;

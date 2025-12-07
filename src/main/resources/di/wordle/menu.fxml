@@ -85,7 +85,7 @@
                     styleClass="bestadisticas"
                     prefHeight="45"
                     prefWidth="260"
-                    onAction="mostrarEstadisticas"
+                    onAction="#mostrarEstadisticas"
                     onMouseEntered="#zoomIn"
                     onMouseExited="#zoomOut"
                     onMousePressed="#brilloOn"

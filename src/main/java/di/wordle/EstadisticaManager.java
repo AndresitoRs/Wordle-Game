@@ -49,4 +49,21 @@ public class EstadisticaManager {
             System.out.println("Estadísticas creadas en MongoDB.");
         }
     }
+
+    public Document obtenerEstadisticas(int usuarioId) {
+        MongoDatabase db = ConexionMongo.getDatabase();
+        MongoCollection<Document> estadisticas = db.getCollection("estadisticas");
+
+        Document doc = estadisticas.find(Filters.eq("usuario_id", usuarioId)).first();
+        if (doc == null) {
+            System.out.println("No se encontró ningún documento para usuarioId: " + usuarioId);
+            return new Document()
+                    .append("partidas_jugadas", 0)
+                    .append("partidas_ganadas", 0)
+                    .append("puntos", 0)
+                    .append("tiempo_jugado", 0);
+        }
+
+        return doc;
+    }
 }
