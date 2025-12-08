@@ -60,4 +60,11 @@ public class Sesion {
             timeline = null;
         }
     }
+    public void cerrarSesion() {
+        usuario = null;
+        usuarioId = 0;
+        tiempoSegundos = 0;
+        detenerTimer(); // Detiene el contador de sesión
+    }
+
 }

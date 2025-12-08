@@ -3,6 +3,8 @@ package di.wordle;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
+import com.mongodb.client.model.Updates;
 import di.wordle.db.Database;
 import org.bson.Document;
 
@@ -35,18 +37,22 @@ public class UsuarioManager {
         MongoCollection<Document> usuarios = db.getCollection("usuarios");
         MongoCollection<Document> estadisticasMongo = db.getCollection("estadisticas");
 
+        // Limpiar posibles documentos nulos
+        estadisticasMongo.deleteMany(Filters.eq("usuario", null));
+        usuarios.deleteMany(Filters.eq("nombre", null));
+
         // Buscar si ya existe el usuario en mongo:
         Document usuarioMongo = usuarios.find(Filters.eq("id", usuarioId)).first();
 
         if (usuarioMongo == null) {
-            // No existe, lo creamos:
+            // No existe, lo creamos
             Document nuevoUsuario = new Document()
                     .append("id", usuarioId)
                     .append("nombre", nombre);
             usuarios.insertOne(nuevoUsuario);
             System.out.println("Usuario creado en MongoDB");
 
-            // Ahora buscamos estadísticas en SQLite para este usuario:
+            // Crear estadísticas solo si no existen
             try (Connection conn = Database.getConnection()) {
                 var stmt = conn.prepareStatement(
                         "SELECT partidas_jugadas, partidas_ganadas, mejor_puntuacion, tiempo_total FROM estadisticas WHERE usuario_id = ?");
@@ -55,6 +61,7 @@ public class UsuarioManager {
                 if (rs.next()) {
                     Document estadisticasDoc = new Document()
                             .append("usuario_id", usuarioId)
+                            .append("usuario", nombre)
                             .append("partidas_jugadas", rs.getInt("partidas_jugadas"))
                             .append("partidas_ganadas", rs.getInt("partidas_ganadas"))
                             .append("mejor_puntuacion", rs.getInt("mejor_puntuacion"))
@@ -66,9 +73,13 @@ public class UsuarioManager {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Usuario ya existe en MongoDB");
+            // Usuario ya existe, no tocar estadísticas
+            System.out.println("Usuario ya existe en MongoDB, se mantienen sus estadísticas");
         }
     }
+
+
+
 
     public boolean registrarUsuario(String nombre, String password) {
         String hash = hashPassword(password);

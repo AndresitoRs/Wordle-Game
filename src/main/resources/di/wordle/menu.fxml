@@ -53,7 +53,7 @@
                     </font>
                 </Button>
 
-                <Button fx:id="bsalir" onAction="#salir" onMouseEntered="#zoomIn" onMouseExited="#zoomOut" onMousePressed="#brilloOn" onMouseReleased="#brilloOff" prefHeight="66.0" prefWidth="358.0" styleClass="bsalir" text="Cerrar APP">
+                <Button fx:id="bsalir" onAction="#cerrarSesion" onMouseEntered="#zoomIn" onMouseExited="#zoomOut" onMousePressed="#brilloOn" onMouseReleased="#brilloOff" prefHeight="66.0" prefWidth="358.0" styleClass="bsalir" text="Cerrar Sesión">
                     <font>
                         <Font name="Segoe UI" size="18.0" />
                     </font>
@@ -94,6 +94,22 @@
                     <Insets top="20"/>
                 </VBox.margin>
             </Button>
+
+            <Button fx:id="branking"
+                    text="Ranking Global"
+                    styleClass="branking"
+                    prefHeight="45"
+                    prefWidth="260"
+                    onAction="#mostrarRanking"
+                    onMouseEntered="#zoomIn"
+                    onMouseExited="#zoomOut"
+                    onMousePressed="#brilloOn"
+                    onMouseReleased="#brilloOff">
+                <VBox.margin>
+                    <Insets top="10"/>
+                </VBox.margin>
+            </Button>
+
         </VBox>
         <HBox alignment="CENTER" prefHeight="79.0" spacing="10" style="-fx-background-color: #222222; -fx-border-color: #444444; -fx-border-width: 0 0 2 0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>

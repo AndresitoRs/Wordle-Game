@@ -3,52 +3,60 @@ package di.wordle;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EstadisticaManager {
 
-    public void actualizarEstadisticasEnMongo(int usuarioId, boolean gano, int puntos, int tiempoJugado) {
+    // Manteniendo el mismo nombre que tu llamada
+    public void actualizarEstadisticasEnMongo(int usuarioId, boolean ganoPartida, int puntosGanados, int tiempoJugadoSegundos) {
         MongoDatabase db = ConexionMongo.getDatabase();
-        MongoCollection<Document> estadisticas = db.getCollection("estadisticas");
+        MongoCollection<Document> estadisticasMongo = db.getCollection("estadisticas");
 
-        // Buscar el documento actual para este usuario
-        Document actual = estadisticas.find(Filters.eq("usuario_id", usuarioId)).first();
+        Document stats = estadisticasMongo.find(Filters.eq("usuario_id", usuarioId)).first();
 
-        int partidasJugadas = 1;
-        int partidasGanadas = gano ? 1 : 0;
-
-        if (actual != null) {
-            // Leer valores actuales y sumarlos
-            partidasJugadas += actual.getInteger("partidas_jugadas", 0);
-            partidasGanadas += actual.getInteger("partidas_ganadas", 0);
-            puntos += actual.getInteger("puntos", 0);
-            tiempoJugado += actual.getInteger("tiempo_jugado", 0);
-
-            // Actualizar el documento
-            estadisticas.updateOne(
-                    Filters.eq("usuario_id", usuarioId),
-                    Updates.combine(
-                            Updates.set("partidas_jugadas", partidasJugadas),
-                            Updates.set("partidas_ganadas", partidasGanadas),
-                            Updates.set("puntos", puntos),
-                            Updates.set("tiempo_jugado", tiempoJugado)
-                    )
-            );
-            System.out.println("Estadísticas actualizadas en MongoDB.");
-        } else {
-            // Si no existe, crea un nuevo documento
+        if (stats == null) {
             Document nuevo = new Document()
                     .append("usuario_id", usuarioId)
-                    .append("partidas_jugadas", partidasJugadas)
-                    .append("partidas_ganadas", partidasGanadas)
-                    .append("puntos", puntos)
-                    .append("tiempo_jugado", tiempoJugado);
-            estadisticas.insertOne(nuevo);
-            System.out.println("Estadísticas creadas en MongoDB.");
+                    .append("partidas_jugadas", 1)
+                    .append("partidas_ganadas", ganoPartida ? 1 : 0)
+                    .append("mejor_puntuacion", puntosGanados)
+                    .append("tiempo_total", tiempoJugadoSegundos)
+                    .append("usuario", Sesion.getInstancia().getUsuario() != null ? Sesion.getInstancia().getUsuario() : "Desconocido");
+            estadisticasMongo.insertOne(nuevo);
+        } else {
+            int actualesPartidas = getIntSafe(stats, "partidas_jugadas");
+            int actualesGanadas = getIntSafe(stats, "partidas_ganadas");
+            int actualesPuntos = getIntSafe(stats, "mejor_puntuacion");
+            long actualesTiempo = getLongSafe(stats, "tiempo_total");
+
+            Document update = new Document("$set", new Document()
+                    .append("partidas_jugadas", actualesPartidas + 1)
+                    .append("partidas_ganadas", actualesGanadas + (ganoPartida ? 1 : 0))
+                    .append("mejor_puntuacion", actualesPuntos + puntosGanados)
+                    .append("tiempo_total", actualesTiempo + tiempoJugadoSegundos)
+                    .append("usuario", Sesion.getInstancia().getUsuario() != null ? Sesion.getInstancia().getUsuario() : "Desconocido"));
+
+            estadisticasMongo.updateOne(Filters.eq("usuario_id", usuarioId), update);
         }
     }
+
+    // Métodos auxiliares
+    private int getIntSafe(Document doc, String key) {
+        Number n = (Number) doc.get(key);
+        return n != null ? n.intValue() : 0;
+    }
+
+    private long getLongSafe(Document doc, String key) {
+        Number n = (Number) doc.get(key);
+        return n != null ? n.longValue() : 0L;
+    }
+
 
     public Document obtenerEstadisticas(int usuarioId) {
         MongoDatabase db = ConexionMongo.getDatabase();
@@ -66,4 +74,15 @@ public class EstadisticaManager {
 
         return doc;
     }
+
+    public List<Document> obtenerRankingGlobal() {
+        MongoDatabase db = ConexionMongo.getDatabase();
+        MongoCollection<Document> col = db.getCollection("estadisticas");
+
+        return col.find()
+                .sort(Sorts.descending("puntos"))
+                .limit(10)
+                .into(new ArrayList<>());
+    }
+
 }
