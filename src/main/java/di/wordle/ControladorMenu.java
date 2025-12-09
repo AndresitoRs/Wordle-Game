@@ -318,8 +318,11 @@ public class ControladorMenu implements Initializable {
 
             int partidasJugadas = stats.getInteger("partidas_jugadas", 0);
             int partidasGanadas = stats.getInteger("partidas_ganadas", 0);
-            int puntos = stats.getInteger("puntos", 0);
-            int tiempo = stats.getInteger("tiempo_jugado", 0);
+            Number puntosNumber = (Number) stats.get("mejor_puntuacion");
+            long puntos = puntosNumber != null ? puntosNumber.longValue() : 0L;
+
+            long tiempo = stats.getLong("tiempo_total");
+
 
             Label lblPartidas = new Label("Partidas jugadas: " + partidasJugadas);
             Label lblGanadas = new Label("Partidas ganadas: " + partidasGanadas);

@@ -9,6 +9,7 @@ import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class EstadisticaManager {
@@ -35,14 +36,19 @@ public class EstadisticaManager {
             int actualesPuntos = getIntSafe(stats, "mejor_puntuacion");
             long actualesTiempo = getLongSafe(stats, "tiempo_total");
 
-            Document update = new Document("$set", new Document()
-                    .append("partidas_jugadas", actualesPartidas + 1)
-                    .append("partidas_ganadas", actualesGanadas + (ganoPartida ? 1 : 0))
-                    .append("mejor_puntuacion", actualesPuntos + puntosGanados)
-                    .append("tiempo_total", actualesTiempo + tiempoJugadoSegundos)
-                    .append("usuario", Sesion.getInstancia().getUsuario() != null ? Sesion.getInstancia().getUsuario() : "Desconocido"));
+            Document update = new Document()
+                    .append("$inc", new Document()
+                            .append("partidas_jugadas", 1)
+                            .append("partidas_ganadas", ganoPartida ? 1 : 0)
+                            .append("mejor_puntuacion", puntosGanados)
+                            .append("tiempo_total", tiempoJugadoSegundos)
+                    )
+                    .append("$set", new Document()
+                            .append("usuario", Sesion.getInstancia().getUsuario() != null ? Sesion.getInstancia().getUsuario() : "Desconocido")
+                    );
 
             estadisticasMongo.updateOne(Filters.eq("usuario_id", usuarioId), update);
+
         }
     }
 
