@@ -68,4 +68,11 @@
         </font>
     </Label>
 
+    <Label text="¿Olvidaste tu contraseña?" textFill="white" underline="true"
+           cursor="$HAND" onMouseClicked="#olvidarPassword">
+        <font>
+            <Font name="Segoe UI" size="12" />
+        </font>
+    </Label>
+
 </VBox>

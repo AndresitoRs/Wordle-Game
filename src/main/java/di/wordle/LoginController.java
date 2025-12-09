@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -110,4 +111,71 @@ public class LoginController {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
+    private String generarCaptcha(int longitud) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < longitud; i++) {
+            int index = (int) (Math.random() * chars.length());
+            sb.append(chars.charAt(index));
+        }
+        return sb.toString();
+    }
+
+
+    @FXML
+    private void olvidarPassword() {
+        // 1. Generar captcha aleatorio
+        String captcha = generarCaptcha(5);
+
+        TextInputDialog dialogCaptcha = new TextInputDialog();
+        dialogCaptcha.setTitle("Verificación");
+        dialogCaptcha.setHeaderText("Recuperación de contraseña");
+        dialogCaptcha.setContentText("Introduce el siguiente código: " + captcha);
+
+        var resultadoCaptcha = dialogCaptcha.showAndWait();
+        if (resultadoCaptcha.isEmpty() || !resultadoCaptcha.get().equals(captcha)) {
+            mostrarAlerta("Error", "Código incorrecto.");
+            return;
+        }
+
+        // 2. Pedir usuario
+        TextInputDialog dialogUsuario = new TextInputDialog();
+        dialogUsuario.setTitle("Usuario");
+        dialogUsuario.setHeaderText("Recuperación de contraseña");
+        dialogUsuario.setContentText("Introduce tu nombre de usuario:");
+
+        var resultadoUsuario = dialogUsuario.showAndWait();
+        if (resultadoUsuario.isEmpty()) return;
+
+        String usuario = resultadoUsuario.get();
+
+        if (!usuarioManager.existeUsuario(usuario)) {
+            mostrarAlerta("Error", "El usuario no existe.");
+            return;
+        }
+
+        // 3. Pedir nueva contraseña
+        TextInputDialog dialogNuevaPass = new TextInputDialog();
+        dialogNuevaPass.setTitle("Nueva contraseña");
+        dialogNuevaPass.setHeaderText("Restablecer contraseña");
+        dialogNuevaPass.setContentText("Introduce la nueva contraseña:");
+
+        var resultadoPass = dialogNuevaPass.showAndWait();
+        if (resultadoPass.isEmpty()) {
+            mostrarAlerta("Error", "La contraseña no puede estar vacía.");
+            return;
+        }
+
+        String nuevaPassword = resultadoPass.get().trim();
+
+        // 4. Guardar nuevo hash en la BD
+        if (usuarioManager.actualizarPassword(usuario, nuevaPassword)) {
+            mostrarAlerta("Éxito", "La contraseña se ha restablecido correctamente.");
+        } else {
+            mostrarAlerta("Error", "No se pudo actualizar la contraseña.");
+        }
+    }
+
+
 }

@@ -231,6 +231,23 @@ public class UsuarioManager {
         }
     }
 
+    public boolean actualizarPassword(String nombre, String nuevaPassword) {
+        String nuevoHash = hashPassword(nuevaPassword);
+
+        String sql = "UPDATE usuarios SET password = ? WHERE nombre = ?";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, nuevoHash);
+            stmt.setString(2, nombre);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public void guardarUsuarioEnMongo(int id, String nombre, String password) {
         MongoDatabase db = ConexionMongo.getDatabase();
         MongoCollection<Document> usuarios = db.getCollection("usuarios");
